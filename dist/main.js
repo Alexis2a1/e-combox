@@ -5938,7 +5938,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var endpoint = 'http://llb.ac-corse.fr:8880/portainer/api/';
+var endpoint = 'http://localhost:8880/portainer/api/';
 var portainerUser = {
     Username: 'admin',
     Password: 'portnairAdmin',

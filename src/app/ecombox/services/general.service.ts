@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { RestService } from './rest.service';
 
-const endpoint = 'http://llb.ac-corse.fr:8880/portainer/api/';
+const endpoint = 'http://localhost:8880/portainer/api/';
 
 @Injectable({
   providedIn: 'root',
