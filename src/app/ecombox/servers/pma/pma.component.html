@@ -1,0 +1,92 @@
+<div class="row">
+        <div class="col-md-12">
+            <div class="titre">
+                <h2>Gestion de l'accès à phpMyAdmin (PMA)</h2>
+            </div>
+        </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <nb-card>
+            <nb-card-body class="row col-md-12">
+                <div class="col-md-12">
+                    <!--<h4>Attention : </h4> Le site (Prestashop, WooCommerce, Blog ou Odoo) pour lequel l'accès 
+                        à la base de données est nécessaire doit être démarré afin que le serveur phpMyAdmin associé soit opérationnel.-->
+                    <h4>Attention : </h4> Les sites listés sur cette page sont les sites Prestashop, WooCommerce et Blog actuellement démarrés car cela est obligatoire pour pouvoir activer phpMyAdmin.
+                </div>
+            </nb-card-body>            
+        </nb-card>
+    </div>
+</div>
+    <div class="row">
+        <div class="example-container col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <nb-card>
+                            <nb-card-body class="row col-md-12">
+                                    <div class="col-md-12">
+                                        <h4>Sites Prestashop :</h4>
+                                    </div>
+                                </nb-card-body>
+                                <nb-card-body class="row col-md-12" [nbSpinner]="loading" nbSpinnerStatus="success">
+                                        <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCardsPresta">
+                                                <ngx-test-pma-card [title]="statusCard.title"
+                                                                [type]="statusCard.type"
+                                                                [id]="statusCard.id" [on]="statusCard.on" [actif]="statusCard.actif" [url]="statusCard.url" 
+                                                                [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack">
+                                                </ngx-test-pma-card>
+                                        </div>
+                                </nb-card-body>
+                            </nb-card>
+                    <nb-card>
+                        <nb-card-body class="row col-md-12">
+                            <div class="col-md-12">
+                                <h4>Sites Woocommerce :</h4>
+                            </div>
+                        </nb-card-body>
+                        <nb-card-body class="row col-md-12" [nbSpinner]="loading" nbSpinnerStatus="success">
+                                <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCardsWoo">
+                                        <ngx-test-pma-card [title]="statusCard.title"
+                                                        [type]="statusCard.type"
+                                                        [id]="statusCard.id" [on]="statusCard.on" [actif]="statusCard.actif" [url]="statusCard.url" 
+                                                        [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack">
+                                        </ngx-test-pma-card>
+                                </div>
+                        </nb-card-body>
+                    </nb-card>
+                    <nb-card>
+                            <nb-card-body class="row col-md-12">
+                                <div class="col-md-12">
+                                    <h4>Sites Blog :</h4>
+                                </div>
+                            </nb-card-body>
+                            <nb-card-body class="row col-md-12" [nbSpinner]="loading" nbSpinnerStatus="success">
+                                    <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCardsBlog">
+                                            <ngx-test-pma-card [title]="statusCard.title"
+                                                            [type]="statusCard.type"
+                                                            [id]="statusCard.id" [on]="statusCard.on" [actif]="statusCard.actif" [url]="statusCard.url" 
+                                                            [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack">
+                                            </ngx-test-pma-card>
+                                    </div>
+                            </nb-card-body>
+                    </nb-card>
+                    <!--<nb-card>
+                            <nb-card-body class="row col-md-12">
+                                <div class="col-md-12">
+                                    <h4>Sites Odoo :</h4>
+                                </div>
+                            </nb-card-body>
+                            <nb-card-body class="row col-md-12" [nbSpinner]="loading" nbSpinnerStatus="success">
+                                    <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCardsOdoo">
+                                            <ngx-test-pma-card [title]="statusCard.title"
+                                                            [type]="statusCard.type"
+                                                            [id]="statusCard.id" [on]="statusCard.on" [actif]="statusCard.actif" [url]="statusCard.url" 
+                                                            [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack">
+                                            </ngx-test-pma-card>
+                                    </div>
+                            </nb-card-body>
+                        </nb-card>-->
+                </div>
+            </div>
+        </div>
+    </div>

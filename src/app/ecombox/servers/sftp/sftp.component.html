@@ -1,0 +1,58 @@
+<div class="row">
+        <div class="col-md-12">
+            <div class="titre">
+                <h2>Gestion du SFTP</h2>
+            </div>
+        </div>
+</div>
+<div class="row">
+        <div class="col-md-12">
+            <nb-card>
+                <nb-card-body class="row col-md-12">
+                    <div class="col-md-12">
+                        <h4>Attention : </h4> Les sites listés sur cette page sont les sites Prestashop et Odoo actuellement démarrés car cela est obligatoire pour pouvoir activer le SFTP et accéder aux sources.
+                    </div>
+                </nb-card-body>            
+            </nb-card>
+        </div>
+    </div>
+    <div class="row">
+        <div class="example-container col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <nb-card>
+                        <nb-card-body class="row col-md-12">
+                            <div class="col-md-12">
+                                <h4>Sites Prestashop :</h4>
+                            </div>
+                        </nb-card-body>
+                        <nb-card-body class="row col-md-12" [nbSpinner]="loading" nbSpinnerStatus="success">
+                                <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCardsPresta">
+                                        <ngx-test-sftp-card [title]="statusCard.title"
+                                                        [type]="statusCard.type"
+                                                        [id]="statusCard.id" [on]="statusCard.on" [actif]="statusCard.actif" [url]="statusCard.url" 
+                                                        [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack">
+                                        </ngx-test-sftp-card>
+                                </div>
+                        </nb-card-body>
+                </nb-card>
+                    <nb-card>
+                            <nb-card-body class="row col-md-12">
+                                <div class="col-md-12">
+                                    <h4>Sites Odoo :</h4>
+                                </div>
+                            </nb-card-body>
+                            <nb-card-body class="row col-md-12" [nbSpinner]="loading" nbSpinnerStatus="success">
+                                    <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCardsOdoo">
+                                            <ngx-test-sftp-card [title]="statusCard.title"
+                                                            [type]="statusCard.type"
+                                                            [id]="statusCard.id" [on]="statusCard.on" [actif]="statusCard.actif" [url]="statusCard.url" 
+                                                            [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack">
+                                            </ngx-test-sftp-card>
+                                    </div>
+                            </nb-card-body>
+                    </nb-card>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,19 @@
+.head-card-container{
+    color: #000;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5;   
+}
+
+.head-card-container:hover{
+    cursor: pointer;
+}
+
+.animated.fadeIn.anim-section-sites{
+    animation-delay: 1s;
+}
+
+.hr-title{
+    border: 1.3px solid #e3e9ee;
+    width: 100%;
+}

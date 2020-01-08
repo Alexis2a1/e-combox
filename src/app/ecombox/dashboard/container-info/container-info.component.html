@@ -1,0 +1,58 @@
+<nb-card class="animated fadeIn anim-section-etat">
+    <nb-card-header class="head-card-container">Etat d'e-comBox
+        <hr class="hr-title">
+    </nb-card-header>
+    <nb-card-body>
+        <div class="progress-info">
+            <div class="title">Nombre de sites créés :
+                <span *ngIf="nbContainers > 0" class="title-config-etat">{{ nbContainers }}</span>
+                <span *ngIf="nbContainers === 0" class="title-config-etat">Aucun site créé</span>
+                <!--<span *ngIf="nbContainers === 0" class="LoaderBalls">Calcul en cours<span class="LoaderBalls__item"><b>●</b></span><span class="LoaderBalls__item"><b>●</b></span><span class="LoaderBalls__item"><b>●</b></span></span>-->
+            </div>
+        </div>
+        <div class="progress-info">
+            <div class="title">Espace de stockage occupé :
+                <span class="title-config-etat">{{ generalService.diskSpaceDescription }}
+                    <span *ngIf="generalService.diskSpaceDescription === 'Calcul en cours'"
+                        class="LoaderBalls diskSpace">
+                        <span class="LoaderBalls__item"><b>●</b></span>
+                <span class="LoaderBalls__item"><b>●</b></span>
+                <span class="LoaderBalls__item"><b>●</b></span>
+                </span>
+                </span>
+            </div>
+        </div>
+        <div class="progress-info">
+            <div class="title">Mémoire utilisée (RAM) :
+                <span *ngIf="memoryUsed > 0" class="title-config-etat">{{ memoryUsed | number:'1.2-2' }} %</span>
+                <span *ngIf="memoryUsed === 0" class="LoaderBalls">Calcul en cours
+                    <span class="LoaderBalls__item"><b>●</b></span>
+                <span class="LoaderBalls__item"><b>●</b></span>
+                <span class="LoaderBalls__item"><b>●</b></span>
+                </span>
+                <span *ngIf='memoryUsed === -1' class="title-config-etat"> - </span>
+            </div>
+            <nb-progress-bar [value]="memoryUsed" size="lg" [status]="memoryUsed > 60 ? 'warning' : 'primary'">
+            </nb-progress-bar>
+        </div>
+        <div class="progress-info">
+            <div class="title">Usage CPU :
+                <span *ngIf="cpuUsed > 0" class="title-config-etat">{{ cpuUsed | number:'1.2-2' }} %</span>
+                <span *ngIf="cpuUsed === 0" class="LoaderBalls">Calcul en cours
+                    <span class="LoaderBalls__item"><b>●</b>
+                    </span>
+                <span class="LoaderBalls__item"><b>●</b></span>
+                <span class="LoaderBalls__item"><b>●</b></span>
+                </span>
+                <span *ngIf='cpuUsed === -1' class="title-config-etat"> - </span>
+            </div>
+            <nb-progress-bar [value]="cpuUsed" size="lg" [status]="cpuUsed > 60 ? 'warning' : 'primary'">
+            </nb-progress-bar>
+        </div>
+    </nb-card-body>
+    <div class="refresh">
+        <button type="button" class="btn btn-primary btn-icon" (click)="onRefresh()" [disabled]="generalService.dashboardRefreshInProgress">
+            <b class="nb-loop"></b>
+        </button>
+    </div>
+</nb-card>

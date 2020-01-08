@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="titre">
+            <h2>Sites {{nomServeur}}</h2>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="example-container col-md-12">
+        <nb-card [nbSpinner]="loading" nbSpinnerStatus="success">
+            <nb-card-body class="row col-md-12">
+                <div class="col-md-3">
+                    <h4>Créer un site :</h4>
+                    <!--<i>Sélectionner le type du site, saisir son nom puis cliquer sur valider.</i>-->
+                </div>
+                <div class="col-md-3">
+                    <nb-radio-group *ngIf="ok" [(ngModel)]="option">
+                        <nb-radio *ngFor="let option of options" [value]="option.value" (valueChange)="checkRadio(option.value)">{{option.label}}</nb-radio>
+                    </nb-radio-group>
+                </div>
+                <div class="col-md-4">
+                    <b>{{typeServeur}}-{{nomArt}}</b><input #suffixe nbInput placeholder="Saisir le nom du site">
+                </div>
+                <div class="col-md-2">
+                    <div class="align-droite">
+                        <button nbButton status="success" (click)="validSuffixe(suffixe.value); suffixe.value=''" [nbPopover]="message" nbPopoverPlacement="right"> Créer</button>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
+<div class="row">
+    <div class="example-container col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <nb-card>
+                    <nb-card-body class="row col-md-12">
+                        <div class="col-md-2">
+                            <h4>Gérer les sites :</h4>                        
+                        </div>
+                        <div class="col-md-2">
+                            <button nbButton *ngIf="isRunning" status="success" (click)="displayURL()" class="marge-droite"> Afficher les URL</button>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="align-droite">
+                                <b>Action sur tous les sites :</b>
+                                <button nbButton status="success" (click)="startAll()" class="marge-droite"> Démarrer</button>
+                                <button nbButton status="success" (click)="stopAll()" class="marge-gauche"> Stopper</button>
+                            </div>
+                        </div>
+                    <!--<nb-card-body *ngIf="isOdoo" class="row col-md-12">
+                        <div class="col-md-12 col-xl-6">
+                            Pour accéder au backoffice, l'URL doit être complétée par <b><i>/web/database/selector</i></b>.
+                        </div>
+                    </nb-card-body>-->
+                    </nb-card-body>
+                    <nb-card-body class="row col-md-12" [nbSpinner]="loadingSite" nbSpinnerStatus="success">
+                            <div class="col-md-12 col-xl-6" *ngFor="let statusCard of statusCards">
+                                    <ngx-test-status-card [title]="statusCard.title"
+                                                    [type]="statusCard.type"
+                                                    [id]="statusCard.id" [on]="statusCard.on" [url]="statusCard.url" 
+                                                    [typeContainer]="statusCard.typeContainer" [nameStack]="statusCard.nameStack"
+                                                    [nameImage]="statusCard.nameImage" [HTTP_PROXY]="statusCard.HTTP_PROXY" 
+                                                    [HTTPS_PROXY]="statusCard.HTTPS_PROXY" [NO_PROXY]="statusCard.NO_PROXY" [http_proxy]="statusCard.http_proxy"
+                                                    [https_proxy]="statusCard.https_proxy" [no_proxy]="statusCard.no_proxy">
+                                    </ngx-test-status-card>
+                                </div>
+                    </nb-card-body>
+                </nb-card>
+            </div>
+        </div>
+    </div>
+</div>

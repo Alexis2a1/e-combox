@@ -1,0 +1,13 @@
+<nb-card class="animated fadeIn anim-section-statut">
+    <nb-card-header class="head-card-container">Statut des sites <hr class="hr-title"></nb-card-header>
+    <nb-card-body>
+        <div class="progress-info" *ngFor="let item of progressInfoData">
+            <div class="title">{{ item.title }} <span *ngIf="item.activeProgress > 0">{{ item.description }}</span>
+            </div>
+            <nb-progress-bar *ngIf="item.activeProgress > 0" [value]="item.activeProgress" size="lg" status="primary">
+            </nb-progress-bar>
+            <div *ngIf="!item.activeProgress && item.value === 0">Aucun site installé</div>
+            <div *ngIf="!item.activeProgress && item.value > 0">Aucun site démarré ( sur {{ item.value }} {{ 'installé' | plural:item.value }})</div>
+        </div>
+    </nb-card-body>
+</nb-card>

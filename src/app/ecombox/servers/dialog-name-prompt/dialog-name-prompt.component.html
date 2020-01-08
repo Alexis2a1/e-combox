@@ -1,0 +1,10 @@
+<nb-card>
+  <nb-card-header>Cette action supprimera définitivement toutes les données associées à ce site. Tapez “oui” pour confirmer :</nb-card-header>
+  <nb-card-body>
+	  <input #name nbInput placeholder="Saisir oui pour confirmer">
+  </nb-card-body>
+  <nb-card-footer>
+    <button nbButton status="danget" (click)="cancel()">Annuler</button>
+    <button nbButton status="success" [nbPopover]="err" nbPopoverPlacement="right" (click)="submit(name.value)">Valider</button>
+  </nb-card-footer>
+</nb-card>

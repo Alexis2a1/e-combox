@@ -1,0 +1,20 @@
+<nb-card>
+  <nb-card-header class="titre"><h3>{{ title }}</h3></nb-card-header>
+  <nb-card-body>
+    <table>
+      <tr>
+        <td class="bold centrer">Sites</td>
+        <td class="bold centrer">URL</td>
+      </tr>
+
+      <tr *ngFor="let url of listURL">
+        <td>{{url.site}}</td>
+        <td> : <a href="{{url.url}}" target="_blank">{{url.url}}</a></td>
+      </tr>
+    </table>
+  </nb-card-body>
+  <nb-card-footer class="centrer">
+    <button nbButton hero status="primary" (click)="dismiss()" class="marge-droite">Fermer</button>
+    <button nbButton hero status="primary" (click)="export()" class="marge-gauche">Exporter</button>
+  </nb-card-footer>
+</nb-card>

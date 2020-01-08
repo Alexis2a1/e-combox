@@ -1,0 +1,31 @@
+@import '../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  nb-card {
+    max-width: 600px;
+    max-height: 500px;
+  }
+}
+
+.centrer{
+  text-align: center;
+}
+
+.titre{
+  border-bottom: 1px groove #cdd5dc;
+	margin-bottom: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
+.marge-gauche{
+	margin-left: 25px;
+}
+
+.marge-droite{
+	margin-right: 25px;
+}
+
+.bold{
+  font-weight: bold;
+}
