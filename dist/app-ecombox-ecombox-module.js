@@ -85047,7 +85047,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var endpoint = 'http://localhost:8880/portainer/api/';
+var endpoint = 'http://localhost:8888/portainer/api/';
 var GeneralService = /** @class */ (function () {
     function GeneralService(http, dockerService) {
         this.http = http;
