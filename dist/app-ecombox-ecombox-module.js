@@ -84248,7 +84248,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var DashboardComponent = /** @class */ (function () {
     function DashboardComponent() {
-        console.log("e-comBox v1 du 08/01/2020");
+        console.log("e-comBox version dev du 23/05/2020");
     }
     DashboardComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -84617,7 +84617,7 @@ var routes = [{
                 canActivate: [_redirect_guard__WEBPACK_IMPORTED_MODULE_6__["RedirectGuard"]],
                 component: _redirect_guard__WEBPACK_IMPORTED_MODULE_6__["RedirectGuard"],
                 data: {
-                    externalUrl: 'http://localhost:8880/portainer/',
+                    externalUrl: 'http://llb.ac-corse.fr:11271/portainer/',
                 },
             }, {
                 path: '',
@@ -85047,7 +85047,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-var endpoint = 'http://localhost:8888/portainer/api/';
+var endpoint = 'http://llb.ac-corse.fr:11271/portainer/api/';
 var GeneralService = /** @class */ (function () {
     function GeneralService(http, dockerService) {
         this.http = http;
