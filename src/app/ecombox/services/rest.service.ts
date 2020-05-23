@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, forkJoin, concat } from 'rxjs';
 import { catchError, tap, timeout, concatMap, mergeMap, last } from 'rxjs/operators';
 
-const endpoint = 'http://localhost:8888/portainer/api/';
+const endpoint = 'http://llb.ac-corse.fr:11271/portainer/api/';
 
 const portainerUser = {
   Username: 'admin',
