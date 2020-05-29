@@ -21,20 +21,6 @@ const paramsGithubStack = {
     name: 'SUFFIXE',
     value: ''
   },
-  ]
-};
-
-const paramsGithubStackProxy = {
-  Name: '',	
-  RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-  RepositoryReferenceName: 'refs/heads/dev',
-  ComposeFilePathInRepository: '',
-  RepositoryAuthentication: false,
-  Env: [
-  {
-    name: 'SUFFIXE',
-    value: ''
-  },
   {
     name: 'HTTP_PROXY',
     value: ''
@@ -241,68 +227,68 @@ export class RestService {
     let body: string;
   
     if (HTTP_PROXY === undefined){
-      paramsGithubStackProxy.Env[1]["value"] = "";
+      paramsGithubStack.Env[1]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[1]["value"] = HTTP_PROXY;
+      paramsGithubStack.Env[1]["value"] = HTTP_PROXY;
     }
 
     if (HTTPS_PROXY === undefined){
-      paramsGithubStackProxy.Env[2]["value"] = "";
+      paramsGithubStack.Env[2]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[2]["value"] = HTTPS_PROXY;
+      paramsGithubStack.Env[2]["value"] = HTTPS_PROXY;
     }
 
     if (NO_PROXY === undefined){
-      paramsGithubStackProxy.Env[5]["value"] = "";
+      paramsGithubStack.Env[5]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[5]["value"] = NO_PROXY;
+      paramsGithubStack.Env[5]["value"] = NO_PROXY;
     }
     if (http_proxy === undefined){
-      paramsGithubStackProxy.Env[3]["value"] = "";
+      paramsGithubStack.Env[3]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[3]["value"] = http_proxy;
+      paramsGithubStack.Env[3]["value"] = http_proxy;
     }
 
     if (https_proxy === undefined){
-      paramsGithubStackProxy.Env[4]["value"] = "";
+      paramsGithubStack.Env[4]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[4]["value"] = https_proxy;
+      paramsGithubStack.Env[4]["value"] = https_proxy;
     }
 
     if (no_proxy === undefined){
-      paramsGithubStackProxy.Env[6]["value"] = "";
+      paramsGithubStack.Env[6]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[6]["value"] = no_proxy;
+      paramsGithubStack.Env[6]["value"] = no_proxy;
     }
 
     if (mdp === undefined){
-      paramsGithubStackProxy.Env[7]["value"] = "";
+      paramsGithubStack.Env[7]["value"] = "";
     }
     else {
-      paramsGithubStackProxy.Env[7]["value"] = mdp;
+      paramsGithubStack.Env[7]["value"] = mdp;
     }
 
     if(typeDb === "vierge"){
-      paramsGithubStackProxy.ComposeFilePathInRepository = "docker-compose-" + server + "-vierge-proxy.yml";
-      paramsGithubStackProxy.Env[0]["value"] = suffixe;
-      paramsGithubStackProxy.Name = server + suffixe;
+      paramsGithubStack.ComposeFilePathInRepository = "docker-compose-" + server + "-vierge.yml";
+      paramsGithubStack.Env[0]["value"] = suffixe;
+      paramsGithubStack.Name = server + suffixe;
     } else if(typeDb === "perso") {
-      paramsGithubStackProxy.ComposeFilePathInRepository = "docker-compose-" + server + "-perso-proxy.yml";
-      paramsGithubStackProxy.Env[0]["value"] = "art-" + suffixe;
-      paramsGithubStackProxy.Name = server + "art" + suffixe;
+      paramsGithubStack.ComposeFilePathInRepository = "docker-compose-" + server + "-art.yml";
+      paramsGithubStack.Env[0]["value"] = "art-" + suffixe;
+      paramsGithubStack.Name = server + "art" + suffixe;
     } else{
-      paramsGithubStackProxy.ComposeFilePathInRepository = "docker-compose-" + server + "-proxy.yml";
-      paramsGithubStackProxy.Env[0]["value"] = suffixe;
-      paramsGithubStackProxy.Name = server + suffixe;
+      paramsGithubStack.ComposeFilePathInRepository = "docker-compose-" + server + ".yml";
+      paramsGithubStack.Env[0]["value"] = suffixe;
+      paramsGithubStack.Name = server + suffixe;
     }
 
-    body = JSON.stringify(paramsGithubStackProxy);
+    body = JSON.stringify(paramsGithubStack);
   
 	  return this.http.post(endpoint + "stacks?type=2&method=repository&endpointId=1", body)
 	  .pipe(
