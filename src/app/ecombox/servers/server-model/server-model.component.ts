@@ -7,6 +7,7 @@ import { NbToastrService } from '@nebular/theme';
 import { ToastrService } from 'ngx-toastr';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { ShowcaseDialogComponent } from '../../servers/showcase-dialog/showcase-dialog.component';
+import { ConditionalExpr } from '@angular/compiler';
 
 interface CardSettings {
 	title: string;
@@ -284,6 +285,17 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		}
 	}
 
+	//fonction permettant de générer une chaine de caractères aléatoire
+	//lengthOfCode: longueur de la chaine souhaitée
+	//possible: liste de caractères possibles
+	makeRandom(lengthOfCode: number, possible: string) {
+		let text = "";
+		for (let i = 0; i < lengthOfCode; i++) {
+		  text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
+		  return text;
+	  }
+
 	validCreate(suffixe: string) {
 		// activation du spinner
 		this.loading = true;
@@ -298,7 +310,14 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 		this.toastr.info('Création du site en cours. Veuillez patienter, cela peut prendre quelques minutes. ');
 
-		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy).subscribe((data: any) => {
+		//génération d'une chaine aléatoire
+		let mdp : string = "";
+		let possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		const lengthOfCode = 20;
+		mdp = this.makeRandom(lengthOfCode, possible);
+		console.log("mdp généré : " + mdp);
+
+		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy, mdp).subscribe((data: any) => {
 			this.idStack = data.Id;
 
 			if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce') || (this.typeServeur === 'blog')) {
@@ -307,25 +326,33 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				this.toastr.info('Le site ' + this.nomSite + ' est en cours d\'initialisation. Merci de patienter encore quelques instants.');
 
 				// execution de la requete pour re-recupérer les infos actualisées (dont l'url avec le port)
-				this.dockerService.getContainersByFiltre('{"name": ["' + this.nomSite + '"]}').subscribe((data: Array<any>) => {
-					data.forEach((container: any) => {
-						this.id = container.Id;
+				this.dockerService.inspectContainerByName(this.nomSite).subscribe((data: any) => {
+						this.id = data.Id;
 						let cmd: string;
+						let leMdp: string;
+						let listEnv: [];
+						listEnv = data.Config.Env;
+						listEnv.forEach(function (env: string) {
+							//recherche du mdp pour la bdd
+							if (env.slice(0,8) === 'DB_PASS=') {
+								leMdp = env.slice(8);
+							}
+						});
+						
+						this.lePort = data.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
 
-						if (container.Ports[0].PublicPort == null) {
-							this.lePort = container.Ports[1].PublicPort;
-						} else {
-							this.lePort = container.Ports[0].PublicPort;
-						}
+						console.log("ip docker: " + this.ipDocker);
+						console.log("le port: " + this.lePort);
+						console.log("la bdd: " + this.nomBdd);
+						console.log("le mdp: " + leMdp);
 
 						// execution des commandes docker exec pour les serveurs prestashop et wordpress
-						cmd = '/tmp/change-url.sh ' + this.ipDocker + ' ' + this.lePort + ' ' + this.nomBdd;
+						cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.lePort + ' ' + this.nomBdd + ' ' + leMdp;
 						this.launchExec(this.nomSite, this.nomBdd, this.id, cmd, this.retryAttempt);
 
-					}, (error: any) => {
-						this.toastr.error('Une erreur est survenue lors de l\'initialisation du site ' + this.nomSite +
-							'. Vous devez le stopper puis le démarrer pour relancer l\'initialisation.');
-					});
+				}, (error: any) => {
+					this.toastr.error('Une erreur est survenue lors de l\'initialisation du site ' + this.nomSite +
+						'. Vous devez le stopper puis le démarrer pour relancer l\'initialisation.');
 				});
 			} else {
 
@@ -437,7 +464,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						this.launchExec(name, nameBDD, id, cmd, retry--, startAll);
 					});
 				} else {
-					//Au bout des 3 "retry" le script change-url.sh renvoie toujours "ERREUR, MySQL"
+					//Au bout des 3 "retry" le script config-site.sh renvoie toujours "ERREUR, MySQL"
 					//Le site ne peut donc pas être opérationnel, il faut supprimer le stack correspondant
 					this.dockerService.deleteStack(this.idStack).subscribe((data: any) => {
 						this.dockerService.purgeVolumes().subscribe((data: any) => {
@@ -450,7 +477,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				}
 			}
 			else if (error.status === 608){
-				//le script change-url.sh renvoie "Connection refused", il y a un pb à priori de proxy
+				//le script config-site.sh renvoie "Connection refused", il y a un pb à priori de proxy
 				//Le site ne peut donc pas être opérationnel, il faut supprimer le stack correspondant
 				this.dockerService.deleteStack(this.idStack).subscribe((data: any) => {
 					this.dockerService.purgeVolumes().subscribe((data: any) => {
@@ -559,7 +586,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							}
 
 							const nameBDD = this.typeServeur + '-db-' + name.split(this.typeServeur + '-')[1];
-							cmd = '/tmp/change-url.sh ' + this.ipDocker + ' ' + port + ' ' + nameBDD;
+							cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + port + ' ' + nameBDD;
 
 							this.launchExec(name, nameBDD, data[0].Id, cmd, this.retryAttempt, true);
 
