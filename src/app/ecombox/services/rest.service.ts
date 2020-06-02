@@ -67,6 +67,9 @@ const paramsGithubStackSftp = {
   {
     name: 'NOMSTACK',
     value: ''
+  },{
+    name: 'SFTP_PASS',
+    value: ''
   },
   ]
 };
@@ -356,9 +359,10 @@ export class RestService {
     );
   }
 
-  createStackSftp(server: string, nomStack: string): Observable<any> {
+  createStackSftp(server: string, nomStack: string, mdp: string): Observable<any> {
     paramsGithubStackSftp.ComposeFilePathInRepository = "docker-compose-sftp-" + server + ".yml";
     paramsGithubStackSftp.Env[0]["value"] = nomStack;
+    paramsGithubStackSftp.Env[1]["value"] = mdp;
     paramsGithubStackSftp.Name = "sftp" + nomStack;
     
     const body = JSON.stringify(paramsGithubStackSftp);

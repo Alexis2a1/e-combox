@@ -61,27 +61,73 @@ export class SftpComponent implements OnInit, OnDestroy {
 		this.displayContainers();
 	}
 
+	//supprime les stacks SFTP non opérationnels
+	//par exemple si e-comBox est coupé sans que les SFTP n'aient été désactivés avant
+	//leur état sera "exited"
+	//voir si il faut gérer d'autres états
+	private deleteSftp(){
+		this.dockerService.getContainersByFiltre('{"name": ["^sftp"], "status": ["exited"]}').subscribe((dataSftpExit: Array<any>) => {
+			dataSftpExit.forEach((containerSftpExit: any) => {
+				//recupération de l'id du stack
+				let idStack: string;
+				let nameStack: string;
+				nameStack = "sftp" + containerSftpExit.Names[0].slice(6);
+				this.dockerService.getStacks().subscribe((data: Array<any>) => {
+					data.forEach((stack: any) => {
+					  if (stack.Name === nameStack) {
+						idStack = stack.Id;	  
+						this.dockerService.deleteStack(idStack).subscribe((data: any) => {
+							console.log("stack SFTP supprimé");
+						});
+					  }
+					});
+				  });
+			})
+		});
+	}
+
+	//recupère la liste des stacks SFTP opérationnels
 	private displayContainers() {
 		this.loading = true;
 
 		const listSftp = [];
 
 		//recupération des serveurs SFTP existant
-		this.dockerService.getContainersByFiltre('{"name": ["^sftp"]}').subscribe((dataSftp: Array<any>) => {
+		this.dockerService.getContainersByFiltre('{"name": ["^sftp"], "status": ["running"]}').subscribe((dataSftp: Array<any>) => {
 			let nom: string;
+			let mdp: string;
 			let servSftp = {
 				nomSftp: "",
-				portSftp: ""
+				portSftp: "",
+				mdpSftp: ""
 			};
+
 			dataSftp.forEach((containerSftp: any) => {
 				nom = containerSftp.Names[0];
 				nom = nom.slice(1, nom.length);
-				servSftp = {
-					nomSftp: nom,
-					portSftp: containerSftp.Ports[0].PublicPort
-				};
 
-				listSftp.push(servSftp);
+				//recupération du mot de passe dans la variable d'environnement SFTP_PASS
+				//les variables d'environnement ne peuvent être récupérées qu'avec une requête "inspect"
+				this.dockerService.inspectContainerByName(nom).subscribe((container: any) => {
+					let listEnv: [];
+					listEnv = container.Config.Env;
+					listEnv.forEach(function (env: string) {
+						//recherche du mdp pour la bdd
+						if (env.slice(0,10) === 'SFTP_PASS=') {
+							mdp = env.slice(10);
+						}
+					});
+	
+					servSftp = {
+						nomSftp: container.Name.slice(1,container.Name.length),
+						portSftp: containerSftp.Ports[0].PublicPort,
+						mdpSftp: mdp
+					};
+	
+					listSftp.push(servSftp);
+
+				});
+
 			})
 
 			//récupération des prestashop
@@ -91,6 +137,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 				let nameType: string;
 				let nameDb: string;
 				let portSftp: string;
+				let mdpSftp: string;
 				let status: boolean;
 				let actif: string;
 
@@ -107,6 +154,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 						if (search) {
 							status = true;
 							portSftp = search.portSftp;
+							mdpSftp = search.mdpSftp;
 							actif = "active";
 						}
 						else {
@@ -122,7 +170,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 							type: 'success',
 							on: status,
 							actif: actif,
-							url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp,
+							url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp + ' MDP : ' + mdpSftp,
 							typeContainer: 'prestashop',
 							nameStack: containerPresta.Labels["com.docker.compose.project"]
 						};
@@ -133,6 +181,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 
 					this.loading = false;
 				})
+				this.loading = false;
 			});
 
 			//récupération des odoo
@@ -142,6 +191,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 				let nameType: string;
 				let nameDb: string;
 				let portSftp: string;
+				let mdpSftp: string;
 				let status: boolean;
 				let actif: string;
 
@@ -158,6 +208,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 						if (search) {
 							status = true;
 							portSftp = search.portSftp;
+							mdpSftp = search.mdpSftp;
 							actif = "active";
 						}
 						else {
@@ -173,7 +224,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 							type: 'success',
 							on: status,
 							actif: actif,
-							url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp,
+							url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp + ' Mdp : ' + mdpSftp,
 							typeContainer: 'odoo',
 							nameStack: containerOdoo.Labels["com.docker.compose.project"]
 						};
@@ -184,6 +235,7 @@ export class SftpComponent implements OnInit, OnDestroy {
 
 					this.loading = false;
 				})
+				this.loading = false;
 			});
 
 
@@ -245,6 +297,9 @@ export class SftpComponent implements OnInit, OnDestroy {
 			this.http_proxy = http_proxy;
 			this.https_proxy = https_proxy;
 			this.no_proxy = no_proxy;
+
+			this.deleteSftp();
+
 			this.displayContainers();
 		});
 

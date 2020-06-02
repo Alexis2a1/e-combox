@@ -49,12 +49,29 @@ export class SftpCardComponent {
 
   loading = false;
 
+	//fonction permettant de générer une chaine de caractères aléatoire
+	//lengthOfCode: longueur de la chaine souhaitée
+	//possible: liste de caractères possibles
+	makeRandom(lengthOfCode: number, possible: string) {
+		let text = "";
+		for (let i = 0; i < lengthOfCode; i++) {
+		  text += possible.charAt(Math.floor(Math.random() * possible.length));
+		}
+		  return text;
+	  }
+
   public onClick(){
     if(!this.on) {
       //activation du spinner
       this.loading = true;
 
-      this.dockerService.createStackSftp(this.typeContainer,this.nameStack).subscribe((data: any) => {
+		 //génération d'une chaine aléatoire
+		 let mdp : string = "";
+		 let possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		 const lengthOfCode = 6;
+		 mdp = this.makeRandom(lengthOfCode, possible);
+
+      this.dockerService.createStackSftp(this.typeContainer,this.nameStack, mdp).subscribe((data: any) => {
 
         //si serveur Odoo, un docker exec est nécessaire
         if (this.typeContainer == "odoo"){
