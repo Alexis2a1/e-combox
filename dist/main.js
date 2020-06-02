@@ -5996,6 +5996,9 @@ var paramsGithubStackSftp = {
         {
             name: 'NOMSTACK',
             value: ''
+        }, {
+            name: 'SFTP_PASS',
+            value: ''
         },
     ]
 };
@@ -6232,9 +6235,10 @@ var RestService = /** @class */ (function () {
         //tap(() => console.log('update stack ok'))
         );
     };
-    RestService.prototype.createStackSftp = function (server, nomStack) {
+    RestService.prototype.createStackSftp = function (server, nomStack, mdp) {
         paramsGithubStackSftp.ComposeFilePathInRepository = "docker-compose-sftp-" + server + ".yml";
         paramsGithubStackSftp.Env[0]["value"] = nomStack;
+        paramsGithubStackSftp.Env[1]["value"] = mdp;
         paramsGithubStackSftp.Name = "sftp" + nomStack;
         var body = JSON.stringify(paramsGithubStackSftp);
         return this.http.post(endpoint + "stacks?type=2&method=repository&endpointId=1", body)
