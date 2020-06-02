@@ -6016,6 +6016,9 @@ var paramsGithubStackPma = {
         {
             name: 'NOMCONTENEUR_DB',
             value: ''
+        }, {
+            name: 'DB_PASS',
+            value: ''
         },
     ]
 };
@@ -6246,7 +6249,7 @@ var RestService = /** @class */ (function () {
         //tap(() => console.log('ajout stack ok'))
         );
     };
-    RestService.prototype.createStackPma = function (server, nomStack, suffixe) {
+    RestService.prototype.createStackPma = function (server, nomStack, suffixe, mdp) {
         if ((server == "blog") || (server == "woocommerce")) {
             paramsGithubStackPma.ComposeFilePathInRepository = "docker-compose-pma-wordpress.yml";
         }
@@ -6255,6 +6258,7 @@ var RestService = /** @class */ (function () {
         }
         paramsGithubStackPma.Env[0]["value"] = nomStack;
         paramsGithubStackPma.Env[1]["value"] = server + "-db" + suffixe;
+        paramsGithubStackPma.Env[2]["value"] = mdp;
         paramsGithubStackPma.Name = "pma" + nomStack;
         var body = JSON.stringify(paramsGithubStackPma);
         return this.http.post(endpoint + "stacks?type=2&method=repository&endpointId=1", body)
