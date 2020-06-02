@@ -88,6 +88,9 @@ const paramsGithubStackPma = {
   {
     name: 'NOMCONTENEUR_DB',
     value: ''
+  },{
+    name: 'DB_PASS',
+    value: ''
   },
 
   ]
@@ -373,7 +376,7 @@ export class RestService {
     );
   }
 
-  createStackPma(server: string, nomStack: string, suffixe: string): Observable<any> {
+  createStackPma(server: string, nomStack: string, suffixe: string, mdp: string): Observable<any> {
     if ((server == "blog")||(server == "woocommerce")){
       paramsGithubStackPma.ComposeFilePathInRepository = "docker-compose-pma-wordpress.yml";
     }
@@ -383,6 +386,7 @@ export class RestService {
     
     paramsGithubStackPma.Env[0]["value"] = nomStack;
     paramsGithubStackPma.Env[1]["value"] = server + "-db" + suffixe;
+    paramsGithubStackPma.Env[2]["value"] = mdp;
     paramsGithubStackPma.Name = "pma" + nomStack;
     
     const body = JSON.stringify(paramsGithubStackPma);

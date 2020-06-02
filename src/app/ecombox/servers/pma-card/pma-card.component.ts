@@ -77,19 +77,34 @@ export class PmaCardComponent {
 
         }
 
-      this.dockerService.createStackPma(this.typeContainer,this.nameStack, suffixe).subscribe((data: any) => {
-        this.actif= "active";
-        this.on = !this.on;
-        this.servPma.reloadCards();
-        
-        //arret du spinner
-        this.loading = false;
-        this.toastr.success('phpMyAdmin est activé pour '+ this.title);
-      },
-      (error: any) => {
-        this.loading = false;
-        this.toastr.error("phpMyAdmin n'a pas été démarré pour " + this.title + ", veuillez retenter l'opération");
+      //récupération de DB_PASS pour l'accès à la base de données
+      this.dockerService.inspectContainerByName(this.typeContainer + suffixe).subscribe((data: any) => {
+        let mdp : string = "";
+        let listEnv: [];
+        listEnv = data.Config.Env;
+        listEnv.forEach(function (env: string) {
+          //recherche du mdp pour la bdd
+          if (env.slice(0,8) === 'DB_PASS=') {
+            mdp = env.slice(8);
+          }
+        });
+
+        this.dockerService.createStackPma(this.typeContainer,this.nameStack, suffixe, mdp).subscribe((data: any) => {
+          this.actif= "active";
+          this.on = !this.on;
+          this.servPma.reloadCards();
+          
+          //arret du spinner
+          this.loading = false;
+          this.toastr.success('phpMyAdmin est activé pour '+ this.title);
+        },
+        (error: any) => {
+          this.loading = false;
+          this.toastr.error("phpMyAdmin n'a pas été démarré pour " + this.title + ", veuillez retenter l'opération");
+        });
+
       });
+
     } 
     else {
       //activation du spinner
