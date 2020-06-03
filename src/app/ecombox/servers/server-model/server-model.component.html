@@ -17,9 +17,12 @@
                     <nb-radio-group *ngIf="ok" [(ngModel)]="option">
                         <nb-radio *ngFor="let option of options" [value]="option.value" (valueChange)="checkRadio(option.value)">{{option.label}}</nb-radio>
                     </nb-radio-group>
+                    <nb-radio-group *ngIf="isOdoo" [(ngModel)]="optionOdoo">
+                        <nb-radio *ngFor="let optionOdoo of optionsOdoo" [value]="optionOdoo.value" (valueChange)="checkRadio(optionOdoo.value)">{{optionOdoo.label}}</nb-radio>
+                    </nb-radio-group>
                 </div>
                 <div class="col-md-4">
-                    <b>{{typeServeur}}-{{nomArt}}</b><input #suffixe nbInput placeholder="Saisir le nom du site">
+                    <b>{{typeServeur}}-{{extension}}</b><input #suffixe nbInput placeholder="Saisir le nom du site">
                 </div>
                 <div class="col-md-2">
                     <div class="align-droite">

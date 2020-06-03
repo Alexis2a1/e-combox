@@ -7,7 +7,6 @@ import { NbToastrService } from '@nebular/theme';
 import { ToastrService } from 'ngx-toastr';
 import { NbDialogService, NbDialogRef } from '@nebular/theme';
 import { ShowcaseDialogComponent } from '../../servers/showcase-dialog/showcase-dialog.component';
-import { ConditionalExpr } from '@angular/compiler';
 
 interface CardSettings {
 	title: string;
@@ -38,7 +37,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 	@Input() typeServeur: string;
 	@Input() ok: boolean = false;
 	@Input() option: any;
-	@Input() nomArt: string;
+	@Input() optionOdoo: any;
+	@Input() extension: string;
 	@Input() isOdoo: boolean = false;
 	@Input() isRunning : boolean;
 
@@ -70,6 +70,11 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		{ value: 'perso', label: 'Art Concept Stories' },
 	];
 
+	optionsOdoo = [
+		{ value: 'v12', label: 'version 12' },
+		{ value: 'v13', label: 'version 13' },
+	];
+
 	oldUrlWP: string;
 	newUrlWP: string;
 	retryAttempt: number = 1;
@@ -91,10 +96,28 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		}
 
 	checkRadio(val) {
-		if (val === 'perso') {
-			this.nomArt = 'art-';
-		} else {
-			this.nomArt = '';
+
+		switch(val){
+			case 'perso': {
+				this.extension = 'art-';
+				break;
+			}
+
+			case 'v12': {
+				this.extension = '12-';
+				break;
+			}
+
+			case 'v13': {
+				this.extension = '13-';
+				break;
+			}
+
+			default: {
+				this.extension = '';
+				break;
+			}
+
 		}
 	}
 
@@ -102,11 +125,20 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		let cpt: number = 0;
 		let newServeur: string;
 
-		if (this.nomArt === 'art-') {
+		if (this.extension === 'art-') {
 			newServeur = this.typeServeur + '-art-' + suffixe;
-		} else {
+		} 
+		else if (this.extension === '12-'){
+			newServeur = this.typeServeur + '-12-' + suffixe;
+		}
+		else if (this.extension === '13-'){
+			newServeur = this.typeServeur + '-13-' + suffixe;
+		}
+		else {
 			newServeur = this.typeServeur + '-' + suffixe;
 		}
+
+		console.log("newserveur : " + newServeur);
 
 		this.commonStatusCardsSet.forEach(function (card) {
 			if (newServeur === card.title) {
@@ -224,7 +256,6 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						type: 'success',
 						on: status,
 						url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
-						//url: 'http://' + this.ipDocker + ':9999/' + this.nameContainer + backOffice,
 						typeContainer: this.typeServeur,
 						nameStack: nameStack,
 						nameImage: nameImage,
@@ -274,6 +305,11 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 					if (regex.test(suffixe)) {
 						if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce')) {
 							this.typeDb = this.option;
+							console.log("typeDb : " + this.typeDb);
+						}
+						else if (this.typeServeur === 'odoo') {
+							this.typeDb = this.optionOdoo;
+							console.log("typeDb : " + this.typeDb);
 						}
 						this.message = '';
 						this.validCreate(suffixe);
@@ -303,10 +339,23 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		if (this.typeDb === 'perso') {
 			this.nomSite = this.typeServeur + '-art-' + suffixe;
 			this.nomBdd = this.typeServeur + '-db-art-' + suffixe;
-		} else {
+		} 
+		else if (this.typeDb === 'v12'){
+			this.nomSite = this.typeServeur + '-12-' + suffixe;
+			this.nomBdd = this.typeServeur + '-db-12-' + suffixe;
+		}
+		else if (this.typeDb === 'v13'){
+			this.nomSite = this.typeServeur + '-13-' + suffixe;
+			this.nomBdd = this.typeServeur + '-db-13-' + suffixe;
+		}
+		else {
 			this.nomSite = this.typeServeur + '-' + suffixe;
 			this.nomBdd = this.typeServeur + '-db-' + suffixe;
 		}
+
+		console.log("nom site : " + this.nomSite);
+		console.log("nom bdd : " + this.nomBdd);
+		console.log("suffixe : " + suffixe);
 
 		this.toastr.info('Création du site en cours. Veuillez patienter, cela peut prendre quelques minutes. ');
 

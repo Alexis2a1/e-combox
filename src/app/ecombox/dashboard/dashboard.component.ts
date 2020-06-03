@@ -10,7 +10,7 @@ export class DashboardComponent {
 
 	constructor() 
 	{
-			console.log("e-comBox version dev du 02/06/2020");
+			console.log("e-comBox version dev du 03/06/2020");
   }
   
 }
