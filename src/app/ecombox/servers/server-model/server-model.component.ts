@@ -178,6 +178,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				let backOffice: string = '';
 				let nameStack: string;
 				let nameImage: string;
+				let mdpBdd: string;
 
 				// selon le type de serveur
 				switch (this.typeServeur) {
@@ -241,6 +242,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						} else {
 							this.port = container.Ports[0].PublicPort;
 						}
+
 						this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.port + backOffice});
 
 					}
