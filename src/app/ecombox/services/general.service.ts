@@ -13,14 +13,14 @@ const endpoint = 'http://llb.ac-corse.fr:11271/portainer/api/';
 export class GeneralService {
 
   refreshInProgress: boolean = false;
-  
+
   // Variables used for dashboard
   dashboardRefreshInProgress: boolean = false;
   diskSpaceDescription: string = 'Calcul en cours';
   memoryUsed: number = 0;
   cpuUsed: number = 0;
   nbContainers: number = 0;
-  
+
   constructor(private http: HttpClient, private dockerService: RestService) {}
 
   getInfo(): Observable<any> {
@@ -36,6 +36,14 @@ export class GeneralService {
     return this.http.get(endpoint + 'endpoints/1/docker/system/df?stream=false')
       .pipe(
         catchError(this.handleError<any>('getContainers')),
+      );
+  }
+
+  // URL à modifier après modifications sur le proxy
+  getAnnounce(): Observable<any> {
+    return this.http.get('https://cors-anywhere.herokuapp.com/https://gitlab.com/siollb/e-combox_scriptsutiles_siollb/-/raw/master/informations.json?inline=false')
+      .pipe(
+        catchError(this.handleError<any>('getInformationsMessage')),
       );
   }
 

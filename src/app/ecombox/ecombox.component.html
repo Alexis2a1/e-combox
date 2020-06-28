@@ -1,4 +1,7 @@
+<nb-alert *ngIf="displayAnnounce" status="success" closable (close)="onClose()">
+    <a href="{{ url }}" target="_blank">{{ announce }}</a>
+</nb-alert>
 <ngx-sample-layout>
-  <nb-menu [items]="menu"></nb-menu>
-  <router-outlet></router-outlet>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet></router-outlet>
 </ngx-sample-layout>
