@@ -173,7 +173,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 		this.dockerService.getContainersByFiltre('{"name": ["^' + this.typeServeur + '"]}').subscribe((data: Array<any>) => {
 			data.forEach((container: any) => {
-				console.log("nom container : " + container.Names[0]);
+				//console.log("nom container : " + container.Names[0]);
 				let name: string = container.Names[0];
 				name = name.slice(1, name.length);
 				let nameType: string;
@@ -205,11 +205,11 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 					case 'mautic': {
 						nameType = name.slice(0, 9);
-						console.log("nameType : " + name);
+						//console.log("nameType : " + name);
 						backOffice = '';
 						//recupération du mdp DB_PASS pour l'afficher sur la carte et dans le PDF des URL
                         this.dockerService.inspectContainerByName(name).subscribe((container: any) => {
-							console.log("name : " + name);
+							//console.log("name : " + name);
 
 							let nameDb: string;
 							nameDb = this.typeServeur + '-db';
@@ -223,7 +223,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 									if (env.slice(0,8) === 'DB_PASS=') {
 										mdp = env.slice(8);
 										mdpBdd = env.slice(8);
-										console.log("mdp recup : " + mdp);
+										//console.log("mdp recup : " + mdp);
 									}
 								});
 								
@@ -235,12 +235,12 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 									nameStack = container.Config.Labels['com.docker.compose.project'];
 									this.isRunning = true;
 									status = true;
-									console.log("stack allumé");
+									//console.log("stack allumé");
 									port = container.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
 								}
 								else{
 									port = '';
-									console.log("stack éteint")
+									//console.log("stack éteint")
 								}
 	
 								this.generateCard(status, name, container.Id, port, nameStack, container.Image, backOffice, mdp);
@@ -274,7 +274,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				}
 
 				if (this.typeServeur !== 'mautic'){
-					console.log("site NON mautic");
+					//console.log("site NON mautic");
 					nameDb = this.typeServeur + '-db';
 
 					if (nameType !== nameDb) {
@@ -290,7 +290,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 								this.port = container.Ports[0].PublicPort;
 							}
 	
-							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.port + backOffice});
+							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.port + backOffice, mdpMautic: 'test'});
 	
 						}
 	
@@ -338,7 +338,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 	}
 
 	generateCard(status: boolean, nameContainer: string, id: string, port: string, nameStack: string, nameImage: string, backOffice: string, mdp: string){
-			//this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + port + backOffice});
+			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + port + backOffice, mdpMautic: mdp});
 
 			const testCard: CardSettings = {
 				title: nameContainer,
@@ -362,13 +362,13 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 			};
 
 			this.commonStatusCardsSet.push(testCard);
-			console.log("card status : " + testCard.on);
+			/*console.log("card status : " + testCard.on);
 			console.log("card id : " + testCard.id);
 			console.log("card url : " + testCard.url);
 			console.log("card mdp : " + testCard.mdp);
 			console.log("card nameStack : " + testCard.nameStack);
 			console.log("card titre : " + testCard.title);
-			console.log("card port : " + port);
+			console.log("card port : " + port);*/
 	}
 
 	validSuffixe(suffixe: string) {

@@ -15,6 +15,7 @@ export class ShowcaseDialogComponent {
   @Input() title: string;
   @Input() listURL = [];
   @Input() typeSite: string;
+  @Input() isMautic: boolean = false;
 
   constructor(protected ref: NbDialogRef<ShowcaseDialogComponent>) {    
   }
@@ -31,7 +32,8 @@ export class ShowcaseDialogComponent {
         {stack: [
           {text: [
            {text: '', bold: true},
-           {text: '', link: ''}
+           {text: '', link: ''},
+           {text: '', bold: true}
           ]
           }
         ],
@@ -41,7 +43,13 @@ export class ShowcaseDialogComponent {
       ]
     };
 
-    this.listURL.forEach(unSite => docDefinition.content.push({stack:[{text:[{text: unSite.site + ' : ', bold: true},{text: unSite.url , link: unSite.url}]}], margin: [0, 5, 0, 0], alignment: 'justify'}));
+    if (this.isMautic){
+      this.listURL.forEach(unSite => docDefinition.content.push({stack:[{text:[{text: unSite.site + ' : ', bold: true},{text: unSite.url + ' ', link: unSite.url}, {text: ' - (MDP : ' + unSite.mdpMautic + ')', bold: true}]}], margin: [0, 5, 0, 0], alignment: 'justify'}));
+    }
+    else{
+      this.listURL.forEach(unSite => docDefinition.content.push({stack:[{text:[{text: unSite.site + ' : ', bold: true},{text: unSite.url + ' ', link: unSite.url}, {text: '', bold: true}]}], margin: [0, 5, 0, 0], alignment: 'justify'}));
+    }
+
 
     pdfMake.createPdf(docDefinition).open();
     //pdfMake.createPdf(docDefinition).download();
@@ -49,6 +57,16 @@ export class ShowcaseDialogComponent {
 
   dismiss() {
     this.ref.close();
+  }
+
+  ngOnInit() {
+    if (this.typeSite === 'mautic'){
+      console.log("site mautic");
+      this.isMautic = true;
+    }
+    else{
+      console.log("site NON mautic");
+    }
   }
 
 

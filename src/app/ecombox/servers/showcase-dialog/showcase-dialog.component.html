@@ -5,11 +5,13 @@
       <tr>
         <td class="bold centrer">Sites</td>
         <td class="bold centrer">URL</td>
+        <td *ngIf="isMautic" class="bold centrer">Mot de passe base de données</td>
       </tr>
 
       <tr *ngFor="let url of listURL">
         <td>{{url.site}}</td>
         <td> : <a href="{{url.url}}" target="_blank">{{url.url}}</a></td>
+        <td *ngIf="isMautic"> : {{url.mdpMautic}}</td>
       </tr>
     </table>
   </nb-card-body>
