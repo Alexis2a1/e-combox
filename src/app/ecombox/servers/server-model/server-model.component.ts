@@ -290,7 +290,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 								this.port = container.Ports[0].PublicPort;
 							}
 	
-							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.port + backOffice, mdpMautic: 'test'});
+							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + '/' + this.nameContainer + backOffice, mdpMautic: 'test'});
 	
 						}
 	
@@ -304,8 +304,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							id: container.Id,
 							type: 'success',
 							on: status,
-							url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
-							//url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + this.nameContainer + backOffice,
+							//url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
+							url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + this.nameContainer + backOffice,
 							mdp: '',
 							typeContainer: this.typeServeur,
 							nameStack: nameStack,
@@ -339,7 +339,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 	generateCard(status: boolean, nameContainer: string, id: string, port: string, nameStack: string, nameImage: string, backOffice: string, mdp: string){
 		if(status){
-			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + port + backOffice, mdpMautic: mdp});
+			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + "/" + nameContainer + backOffice, mdpMautic: mdp});
 		}
 
 			const testCard: CardSettings = {
@@ -349,8 +349,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				id: id,
 				type: 'success',
 				on: status,
-				url: 'http://' + this.ipDocker + ':' + port + backOffice,
-				//url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + nameContainer + ":" + this.portNginx + backOffice,
+				//url: 'http://' + this.ipDocker + ':' + port + backOffice,
+				url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + nameContainer + backOffice,
 				mdp: ' (MDP: ' + mdp + ')',
 				typeContainer: this.typeServeur,
 				nameStack: nameStack,
@@ -462,7 +462,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy, mdp, mdpRoot).subscribe((data: any) => {
 			this.idStack = data.Id;
 
-			if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce') || (this.typeServeur === 'blog')) {
+			if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce') || (this.typeServeur === 'blog') || (this.typeServeur === 'kanboard')) {
 
 				// tslint:disable-next-line:max-line-length
 				this.toastr.info('Le site ' + this.nomSite + ' est en cours d\'initialisation. Merci de patienter encore quelques instants.');
@@ -492,8 +492,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						console.log("le port NGINX: " + this.portNginx);
 
 						// execution des commandes docker exec pour les serveurs prestashop et wordpress
-						cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.lePort + ' ' + this.nomBdd + ' ' + leMdp;
-						//cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + this.nomBdd;
+						//cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.lePort + ' ' + this.nomBdd + ' ' + leMdp;
+						cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + this.nomBdd;
 						this.launchExec(this.nomSite, this.nomBdd, this.id, cmd, this.retryAttempt);
 
 				}, (error: any) => {
@@ -514,9 +514,9 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						break;
 					case 'odoo':
 					case 'mautic':
-					case 'kanboard':
+					/*case 'kanboard':
 						delai = 0;
-						break;
+						break;*/
 				}
 
 				if (delai > 0){
@@ -902,7 +902,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 			this.toastr.error('Une erreur est survenue. Vous devez vérifier l\'environnement.');
 		});
 
-		this.dockerService.inspectContainerByName('nginx-reverseproxy').subscribe((data: any) => {
+		this.dockerService.inspectContainerByName('nginx').subscribe((data: any) => {
 			// la valeur à récupérer dans Env[] commence toujours par 'NGINX_PORT:' il faut donc supprimer les 11 premiers caractères
 			let tabEnv = [];
 			let port: string;

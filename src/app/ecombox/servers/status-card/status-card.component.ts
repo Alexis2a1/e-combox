@@ -107,8 +107,9 @@ export class StatusCardComponent {
 									console.log("recup var env mdp MySQL : " + mdpBdd);
 								}
 								else if (env.slice(0,19) === 'MYSQL_ROOT_PASSWORD') {
+									console.log(" env root mysql : " + env);
 									mdpRootBdd = env.slice(20);
-									console.log("recup var env mdp ROOT MySQL : " + mdpBdd);
+									console.log("recup var env mdp ROOT MySQL : " + mdpRootBdd);
 								}
 								else if (env.slice(0,17) === 'POSTGRES_PASSWORD') {
 									mdpBdd = env.slice(18);
@@ -138,7 +139,8 @@ export class StatusCardComponent {
 											case 'prestashop':
 											case 'blog':
 											case 'woocommerce':
-												cmd = '/tmp/config-site.sh ' + this.servModel.ipDocker + ' ' + this.lePort + ' ' + this.nameBdd+ ' ' + mdpBdd ;
+											case 'kanboard':
+												cmd = '/tmp/config-site.sh ' + this.servModel.ipDocker + ' ' + this.servModel.portNginx + ' ' + this.nameBdd ;
 												this.launchExec(this.title, cmd, this.retryAttempt);
 												break;
 		
