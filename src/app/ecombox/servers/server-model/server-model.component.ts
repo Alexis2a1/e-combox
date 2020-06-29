@@ -304,8 +304,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							id: container.Id,
 							type: 'success',
 							on: status,
-							//url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
-							url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + this.nameContainer + backOffice,
+							url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
+							//url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + this.nameContainer + backOffice,
 							mdp: '',
 							typeContainer: this.typeServeur,
 							nameStack: nameStack,
@@ -347,8 +347,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				id: id,
 				type: 'success',
 				on: status,
-				//url: 'http://' + this.ipDocker + ':' + port + backOffice,
-				url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + nameContainer + ":" + this.portNginx + backOffice,
+				url: 'http://' + this.ipDocker + ':' + port + backOffice,
+				//url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + nameContainer + ":" + this.portNginx + backOffice,
 				mdp: ' (MDP: ' + mdp + ')',
 				typeContainer: this.typeServeur,
 				nameStack: nameStack,
@@ -446,14 +446,18 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 		this.toastr.info('Création du site en cours. Veuillez patienter, cela peut prendre quelques minutes. ');
 
-		//génération d'une chaine aléatoire
+		//génération d'une chaine aléatoire pour l'utilisateur de la BDD
 		let mdp : string = "";
 		let possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		const lengthOfCode = 20;
 		mdp = this.makeRandom(lengthOfCode, possible);
 		console.log("mdp généré : " + mdp);
+		//génération d'une chaine aléatoire pour l'utilisateur ROOT de la BDD
+		let mdpRoot : string = "";
+		mdpRoot = this.makeRandom(lengthOfCode, possible);
+		console.log("mdp ROOT généré : " + mdpRoot);
 
-		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy, mdp).subscribe((data: any) => {
+		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy, mdp, mdpRoot).subscribe((data: any) => {
 			this.idStack = data.Id;
 
 			if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce') || (this.typeServeur === 'blog')) {
@@ -486,8 +490,8 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						console.log("le port NGINX: " + this.portNginx);
 
 						// execution des commandes docker exec pour les serveurs prestashop et wordpress
-						//cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + this.nomBdd + ' ' + leMdp;
-						cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + this.nomBdd;
+						cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.lePort + ' ' + this.nomBdd + ' ' + leMdp;
+						//cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + this.nomBdd;
 						this.launchExec(this.nomSite, this.nomBdd, this.id, cmd, this.retryAttempt);
 
 				}, (error: any) => {
@@ -719,14 +723,14 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							let cmd: string;
 							let port: any;
 
-							/*if (data[0].Ports[0].PublicPort == null) {
+							if (data[0].Ports[0].PublicPort == null) {
 								port = data[0].Ports[1].PublicPort;
 							} else {
 								port = data[0].Ports[0].PublicPort;
-							}*/
+							}
 
 							const nameBDD = this.typeServeur + '-db-' + name.split(this.typeServeur + '-')[1];
-							cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + nameBDD;
+							cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + port + ' ' + nameBDD;
 
 							this.launchExec(name, nameBDD, data[0].Id, cmd, this.retryAttempt, true);
 
