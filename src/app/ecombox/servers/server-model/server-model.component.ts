@@ -15,6 +15,7 @@ interface CardSettings {
 	type: string;
 	on: boolean;
 	url: string;
+	mdp: string;
 	typeContainer: string;
 	nameStack: string;
 	nameImage: string;
@@ -202,6 +203,48 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 					case 'mautic': {
 						nameType = name.slice(0, 9);
+						console.log("nameType : " + name);
+						backOffice = '';
+						//recupération du mdp DB_PASS pour l'afficher sur la carte et dans le PDF des URL
+                        this.dockerService.inspectContainerByName(name).subscribe((container: any) => {
+							console.log("name : " + name);
+
+							let nameDb: string;
+							nameDb = this.typeServeur + '-db';
+					
+							if (nameType !== nameDb) {
+								let listEnv: [];
+								listEnv = container.Config.Env;
+								let mdp: string;
+								listEnv.forEach(function (env: string) {
+									//recherche du mdp pour la bdd
+									if (env.slice(0,8) === 'DB_PASS=') {
+										mdp = env.slice(8);
+										mdpBdd = env.slice(8);
+										console.log("mdp recup : " + mdp);
+									}
+								});
+								
+								let status: boolean = false;
+								let port: string;
+								let nameStack: string;
+	
+								if (container.State.Status === 'running') {
+									nameStack = container.Config.Labels['com.docker.compose.project'];
+									this.isRunning = true;
+									status = true;
+									console.log("stack allumé");
+									port = container.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
+								}
+								else{
+									port = '';
+									console.log("stack éteint")
+								}
+	
+								this.generateCard(status, name, container.Id, port, nameStack, container.Image, backOffice, mdp);
+							}
+
+                        });
 						break;
 					}
 
@@ -228,49 +271,53 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 				}
 
-				nameDb = this.typeServeur + '-db';
+				if (this.typeServeur !== 'mautic'){
+					nameDb = this.typeServeur + '-db';
 
-				if (nameType !== nameDb) {
-					let status: boolean = false;
-					this.nameContainer = name;
-
-					if (container.State === 'running') {
-						this.isRunning = true;
-						status = true;
-						if (container.Ports[0].PublicPort == null) {
-							this.port = container.Ports[1].PublicPort;
-						} else {
-							this.port = container.Ports[0].PublicPort;
+					if (nameType !== nameDb) {
+						let status: boolean = false;
+						this.nameContainer = name;
+	
+						if (container.State === 'running') {
+							this.isRunning = true;
+							status = true;
+							if (container.Ports[0].PublicPort == null) {
+								this.port = container.Ports[1].PublicPort;
+							} else {
+								this.port = container.Ports[0].PublicPort;
+							}
+	
+							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.port + backOffice});
+	
 						}
-
-						this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.port + backOffice});
-
+	
+						nameStack = container.Labels['com.docker.compose.project'];
+						nameImage = container.Image;
+	
+						const testCard: CardSettings = {
+							title: this.nameContainer,
+							// défini l'icone du bouton démarrer/stopper un serveur
+							iconClass: 'nb-power-circled',
+							id: container.Id,
+							type: 'success',
+							on: status,
+							url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
+							mdp: '',
+							typeContainer: this.typeServeur,
+							nameStack: nameStack,
+							nameImage: nameImage,
+							HTTP_PROXY: this.HTTP_PROXY,
+							HTTPS_PROXY: this.HTTPS_PROXY,
+							NO_PROXY: this.NO_PROXY,
+							http_proxy: this.http_proxy,
+							https_proxy: this.https_proxy,
+							no_proxy: this.no_proxy,
+						};
+	
+						this.commonStatusCardsSet.push(testCard);
 					}
-
-					nameStack = container.Labels['com.docker.compose.project'];
-					nameImage = container.Image;
-
-					const testCard: CardSettings = {
-						title: this.nameContainer,
-						// défini l'icone du bouton démarrer/stopper un serveur
-						iconClass: 'nb-power-circled',
-						id: container.Id,
-						type: 'success',
-						on: status,
-						url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
-						typeContainer: this.typeServeur,
-						nameStack: nameStack,
-						nameImage: nameImage,
-						HTTP_PROXY: this.HTTP_PROXY,
-						HTTPS_PROXY: this.HTTPS_PROXY,
-						NO_PROXY: this.NO_PROXY,
-						http_proxy: this.http_proxy,
-						https_proxy: this.https_proxy,
-						no_proxy: this.no_proxy,
-					};
-
-					this.commonStatusCardsSet.push(testCard);
 				}
+
 			});
 			
 
@@ -284,6 +331,39 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				this.toastr.error('Une erreur est survenue lors de la récupération des sites. Vous devez retenter l\'opération.');
 			}
 		});
+	}
+
+	generateCard(status: boolean, nameContainer: string, id: string, port: string, nameStack: string, nameImage: string, backOffice: string, mdp: string){
+			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + port + backOffice});
+
+			const testCard: CardSettings = {
+				title: nameContainer,
+				// défini l'icone du bouton démarrer/stopper un serveur
+				iconClass: 'nb-power-circled',
+				id: id,
+				type: 'success',
+				on: status,
+				url: 'http://' + this.ipDocker + ':' + port + backOffice,
+				mdp: ' (MDP: ' + mdp + ')',
+				typeContainer: this.typeServeur,
+				nameStack: nameStack,
+				nameImage: nameImage,
+				HTTP_PROXY: this.HTTP_PROXY,
+				HTTPS_PROXY: this.HTTPS_PROXY,
+				NO_PROXY: this.NO_PROXY,
+				http_proxy: this.http_proxy,
+				https_proxy: this.https_proxy,
+				no_proxy: this.no_proxy,
+			};
+
+			this.commonStatusCardsSet.push(testCard);
+			console.log("card status : " + testCard.on);
+			console.log("card id : " + testCard.id);
+			console.log("card url : " + testCard.url);
+			console.log("card mdp : " + testCard.mdp);
+			console.log("card nameStack : " + testCard.nameStack);
+			console.log("card titre : " + testCard.title);
+			console.log("card port : " + port);
 	}
 
 	validSuffixe(suffixe: string) {

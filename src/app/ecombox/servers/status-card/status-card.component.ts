@@ -21,7 +21,7 @@ import { ToastrService } from 'ngx-toastr';
 	<div class="title">{{ title }}</div>
 	<div class="status">{{ on ? 'Démarré' : 'Arrêté' }}</div>
 	<!--<div class="title" *ngIf="on">URL: <a href="{{ url }}" target="_blank">{{ url }}</a></div>-->
-	<div class="title" *ngIf="on"><a href="{{ url }}" title="{{ url }}" target="_blank">Accéder au site</a></div>
+	<div class="title" *ngIf="on"><a href="{{ url }}" title="{{ url }}" target="_blank">Accéder au site</a> {{ mdp }}</div>
       </div>
       <div class="bt-suppr">
 	<button type="button" class="btn btn-outline-danger btn-icon" (click)="confirmSuppr()">
@@ -38,6 +38,7 @@ export class StatusCardComponent {
 	@Input() id: string;
 	@Input() on: boolean;
 	@Input() url: string;
+	@Input() mdp: string;
 	@Input() typeContainer: string;
 	@Input() nameStack: string;
 	@Input() nameImage: string;
