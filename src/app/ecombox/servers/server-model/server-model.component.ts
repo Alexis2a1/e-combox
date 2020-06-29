@@ -338,7 +338,9 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 	}
 
 	generateCard(status: boolean, nameContainer: string, id: string, port: string, nameStack: string, nameImage: string, backOffice: string, mdp: string){
+		if(status){
 			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + port + backOffice, mdpMautic: mdp});
+		}
 
 			const testCard: CardSettings = {
 				title: nameContainer,
