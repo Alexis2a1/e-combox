@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { RestService } from '../../services/rest.service';
 import { GeneralService } from '../../services/general.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'ngx-container-info',
@@ -14,6 +15,9 @@ export class ContainerInfoComponent implements OnInit {
   nbContainers: number;
   memoryUsed: number;
   cpuUsed: number;
+  version: string = environment.ecomboxVersion;
+  lastVersion: string;
+  urlInstallVersion: string;
 
   diskSpaceDescription: string;
   diskSpaceUsed: number;
@@ -30,6 +34,17 @@ export class ContainerInfoComponent implements OnInit {
     if (!this.generalService.dashboardRefreshInProgress) {
       this.getInfo();
     }
+
+    this.generalService.getAnnounce().subscribe(response => {
+      if (response) {
+        this.lastVersion = response.version;
+        if (response.url) {
+          this.urlInstallVersion = response.url;
+        }
+      }
+    }, (error: any) => {
+        console.error('ERROR : ' + error);
+    });
   }
 
   reinitializeVariables() {
