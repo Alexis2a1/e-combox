@@ -1,5 +1,16 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([["main"],{
 
+/***/ "./package.json":
+/*!**********************!*\
+  !*** ./package.json ***!
+  \**********************/
+/*! exports provided: name, version, license, repository, bugs, browserslist, scripts, dependencies, devDependencies, default */
+/***/ (function(module) {
+
+module.exports = {"name":"e-comBox","version":"2.0","license":"CeCILL","repository":{"type":"git","url":"git+https://gitlab.com/e-combox/e-combox_app"},"bugs":{"url":"http://llb.ac-corse.fr/ecomboxsupport/"},"browserslist":["> 1%","last 2 versions","IE 11"],"scripts":{"ng":"ng","conventional-changelog":"conventional-changelog","start":"ng serve","build":"ng build","build:prod":"npm run build -- --prod --aot","test":"ng test","test:coverage":"rimraf coverage && npm run test -- --code-coverage","lint":"ng lint","lint:fix":"ng lint ngx-ecombox --fix","lint:styles":"stylelint ./src/**/*.scss","lint:ci":"npm run lint && npm run lint:styles","pree2e":"webdriver-manager update --standalone false --gecko false","e2e":"ng e2e","docs":"compodoc -p src/tsconfig.app.json -d docs","docs:serve":"compodoc -p src/tsconfig.app.json -d docs -s","prepush":"npm run lint:ci","release:changelog":"npm run conventional-changelog -- -p angular -i CHANGELOG.md -s"},"dependencies":{"@agm/core":"^1.0.0-beta.5","@angular/animations":"^7.2.15","@angular/cdk":"^7.0.3","@angular/common":"^7.0.3","@angular/compiler":"^7.0.3","@angular/core":"^7.0.3","@angular/forms":"^7.0.3","@angular/http":"^7.0.3","@angular/platform-browser":"^7.0.3","@angular/platform-browser-dynamic":"^7.0.3","@angular/router":"^7.0.3","@asymmetrik/ngx-leaflet":"3.0.1","@nebular/auth":"3.1.0","@nebular/bootstrap":"3.1.0","@nebular/security":"3.1.0","@nebular/theme":"3.1.0","@ng-bootstrap/ng-bootstrap":"^4.0.0","@swimlane/ngx-charts":"^10.0.0","angular-tree-component":"7.2.0","angular2-chartjs":"0.4.1","angular2-toaster":"^6.1.0","bootstrap":"4.0.0","chart.js":"2.7.1","ckeditor":"4.7.3","classlist.js":"1.1.20150312","core-js":"2.5.1","echarts":"4.0.2","eva-icons":"^1.1.0","file-saver":"^2.0.2","intl":"1.2.5","ionicons":"2.0.1","leaflet":"1.2.0","nebular-icons":"1.1.0","ng2-ckeditor":"^1.2.2","ng2-completer":"2.0.8","ng2-smart-table":"1.3.5","ngx-device-detector":"^1.4.4","ngx-echarts":"4.0.1","ngx-toastr":"^10.2.0","node-sass":"^4.14.1","normalize.css":"6.0.0","pace-js":"1.0.2","pdfmake":"^0.1.63","roboto-fontface":"0.8.0","rxjs":"6.3.0","rxjs-compat":"6.3.0","socicon":"3.0.5","tinymce":"4.5.7","typeface-exo":"0.0.22","web-animations-js":"2.2.5","zone.js":"^0.8.26"},"devDependencies":{"@angular-devkit/build-angular":"0.10.2","@angular/cli":"^7.0.3","@angular/compiler-cli":"^7.0.3","@angular/language-service":"7.0.0","@compodoc/compodoc":"1.0.1","@fortawesome/fontawesome-free":"^5.2.0","@types/d3-color":"1.0.5","@types/googlemaps":"^3.30.4","@types/jasmine":"2.5.54","@types/jasminewd2":"2.0.3","@types/leaflet":"1.2.3","@types/node":"6.0.90","codelyzer":"^4.5.0","conventional-changelog-cli":"1.3.4","electron":"^9.0.1","jasmine-core":"2.6.4","jasmine-spec-reporter":"4.1.1","karma":"1.7.1","karma-chrome-launcher":"2.1.1","karma-cli":"1.0.1","karma-coverage-istanbul-reporter":"1.3.0","karma-jasmine":"1.1.0","karma-jasmine-html-reporter":"0.2.2","npm-run-all":"4.0.2","protractor":"5.1.2","rimraf":"2.6.1","stylelint":"7.13.0","ts-node":"3.2.2","tslint":"5.7.0","tslint-language-service":"^0.9.9","typescript":"3.1.3"}};
+
+/***/ }),
+
 /***/ "./src/$$_lazy_route_resource lazy recursive":
 /*!**********************************************************!*\
   !*** ./src/$$_lazy_route_resource lazy namespace object ***!
@@ -6418,6 +6429,8 @@ var RestService = /** @class */ (function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "environment", function() { return environment; });
+/* harmony import */ var _package_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../package.json */ "./package.json");
+var _package_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../../package.json */ "./package.json", 1);
 /**
  * @license
  * Copyright Akveo. All Rights Reserved.
@@ -6427,8 +6440,10 @@ __webpack_require__.r(__webpack_exports__);
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
+
 var environment = {
     production: true,
+    ecomboxVersion: _package_json__WEBPACK_IMPORTED_MODULE_0__["version"],
 };
 
 
