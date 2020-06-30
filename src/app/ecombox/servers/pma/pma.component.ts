@@ -27,6 +27,7 @@ export class PmaComponent implements OnInit, OnDestroy {
   private alive = true;
   solarValue: number;
   ipDocker: string;
+  portNginx: string;
   port: string;
   nameContainer: string;
   statusCardsPresta: string;
@@ -133,7 +134,8 @@ export class PmaComponent implements OnInit, OnDestroy {
 						type: 'success',
 						on: status,
 						actif: actif,
-						url: 'http://' + this.ipDocker + ':' + portPma,
+						//url: 'http://' + this.ipDocker + ':' + portPma,
+						url: 'http://' + this.ipDocker + ':' + this.portNginx + "/pma-" + containerPresta.Labels["com.docker.compose.project"] + "/",
 						typeContainer: 'prestashop',
 						nameStack: containerPresta.Labels["com.docker.compose.project"]
 					};
@@ -234,7 +236,8 @@ export class PmaComponent implements OnInit, OnDestroy {
 						type: 'success',
 						on: status,
 						actif: actif,
-						url: 'http://' + this.ipDocker + ':' + portPma,
+						//url: 'http://' + this.ipDocker + ':' + portPma,
+						url: 'http://' + this.ipDocker + ':' + this.portNginx + "/pma-" + containerBlog.Labels["com.docker.compose.project"] + "/",
 						typeContainer: 'blog',
 						nameStack: containerBlog.Labels["com.docker.compose.project"]
 					};
@@ -284,7 +287,8 @@ export class PmaComponent implements OnInit, OnDestroy {
 						type: 'success',
 						on: status,
 						actif: actif,
-						url: 'http://' + this.ipDocker + ':' + portPma,
+						//url: 'http://' + this.ipDocker + ':' + portPma,
+						url: 'http://' + this.ipDocker + ':' + this.portNginx + "/pma-" + containerWoo.Labels["com.docker.compose.project"] + "/",
 						typeContainer: 'woocommerce',
 						nameStack: containerWoo.Labels["com.docker.compose.project"]
 					};
@@ -315,8 +319,27 @@ ngOnInit() {
 				}
 			}
 			
+			//this.displayContainers();
+		});
+
+		this.dockerService.inspectContainerByName('nginx').subscribe((data: any) => {
+			// la valeur à récupérer dans Env[] commence toujours par 'NGINX_PORT:' il faut donc supprimer les 11 premiers caractères
+			let tabEnv = [];
+			let port: string;
+
+			tabEnv = data.Config.Env;
+			tabEnv.forEach(function (env) {
+				//recherche du port de NGINX
+				if (env.slice(0, 10) === 'NGINX_PORT') {
+					port = env.slice(11);
+				}
+
+			});
+			this.portNginx = port;
+
 			this.displayContainers();
 		});
+
 
 		this.themeService.getJsTheme()
 			.pipe(takeWhile(() => this.alive))
