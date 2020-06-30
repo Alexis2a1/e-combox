@@ -106,14 +106,15 @@ export class StatusCardComponent {
 									mdpBdd = env.slice(15);
 									console.log("recup var env mdp MySQL : " + mdpBdd);
 								}
-								else if (env.slice(0,19) === 'MYSQL_ROOT_PASSWORD') {
-									console.log(" env root mysql : " + env);
-									mdpRootBdd = env.slice(20);
-									console.log("recup var env mdp ROOT MySQL : " + mdpRootBdd);
-								}
 								else if (env.slice(0,17) === 'POSTGRES_PASSWORD') {
 									mdpBdd = env.slice(18);
 									console.log("recup var env mdp Postgres : " + mdpBdd);
+								}
+
+								if (env.slice(0,19) === 'MYSQL_ROOT_PASSWORD') {
+									console.log(" env root mysql : " + env);
+									mdpRootBdd = env.slice(20);
+									console.log("recup var env mdp ROOT MySQL : " + mdpRootBdd);
 								}
 							});
 						

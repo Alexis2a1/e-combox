@@ -290,7 +290,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 								this.port = container.Ports[0].PublicPort;
 							}
 	
-							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + '/' + this.nameContainer + backOffice, mdpMautic: 'test'});
+							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + '/' + this.nameContainer + backOffice + "/", mdpMautic: 'test'});
 	
 						}
 	
@@ -305,7 +305,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							type: 'success',
 							on: status,
 							//url: 'http://' + this.ipDocker + ':' + this.port + backOffice,
-							url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + this.nameContainer + backOffice,
+							url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + this.nameContainer + backOffice + "/",
 							mdp: '',
 							typeContainer: this.typeServeur,
 							nameStack: nameStack,
@@ -339,7 +339,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 	generateCard(status: boolean, nameContainer: string, id: string, port: string, nameStack: string, nameImage: string, backOffice: string, mdp: string){
 		if(status){
-			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + "/" + nameContainer + backOffice, mdpMautic: mdp});
+			this.listURL.push({site: nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + "/" + nameContainer + backOffice + "/", mdpMautic: mdp});
 		}
 
 			const testCard: CardSettings = {
@@ -350,7 +350,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 				type: 'success',
 				on: status,
 				//url: 'http://' + this.ipDocker + ':' + port + backOffice,
-				url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + nameContainer + backOffice,
+				url: 'http://' + this.ipDocker + ":" + this.portNginx + '/' + nameContainer + backOffice + "/",
 				mdp: ' (MDP: ' + mdp + ')',
 				typeContainer: this.typeServeur,
 				nameStack: nameStack,
@@ -462,6 +462,9 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy, mdp, mdpRoot).subscribe((data: any) => {
 			this.idStack = data.Id;
 
+			console.log("dans create stack : mdp : " + mdp);
+			console.log("dans create stack : mdp root : " + mdpRoot);
+
 			if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce') || (this.typeServeur === 'blog') || (this.typeServeur === 'kanboard')) {
 
 				// tslint:disable-next-line:max-line-length
@@ -484,12 +487,12 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						//plus utilisé => remplacé par portNginx
 						this.lePort = data.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
 
-						console.log("ip docker: " + this.ipDocker);
+						/*console.log("ip docker: " + this.ipDocker);
 						console.log("le port: " + this.lePort);
 						console.log("la bdd: " + this.nomBdd);
 						console.log("le mdp: " + leMdp);
 
-						console.log("le port NGINX: " + this.portNginx);
+						console.log("le port NGINX: " + this.portNginx);*/
 
 						// execution des commandes docker exec pour les serveurs prestashop et wordpress
 						//cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.lePort + ' ' + this.nomBdd + ' ' + leMdp;

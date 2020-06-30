@@ -288,7 +288,7 @@ export class RestService {
       paramsGithubStack.Env[8]["value"] = "";
     }
     else {
-      paramsGithubStack.Env[8]["value"] = mdp;
+      paramsGithubStack.Env[8]["value"] = mdpRoot;
     }
 
     if(typeDb === "vierge"){
