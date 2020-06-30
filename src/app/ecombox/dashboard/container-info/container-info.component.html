@@ -4,6 +4,13 @@
     </nb-card-header>
     <nb-card-body>
         <div class="progress-info">
+            <div class="title">Version :
+                <span class="title-config-etat">{{ version }} </span>
+                <span *ngIf="version === lastVersion" class="title-config-etat">(à jour)</span>
+                <span *ngIf="version !== lastVersion" class="title-config-etat">(une nouvelle version est disponible)</span>
+            </div>
+        </div>
+        <div class="progress-info">
             <div class="title">Nombre de sites créés :
                 <span *ngIf="nbContainers > 0" class="title-config-etat">{{ nbContainers }}</span>
                 <span *ngIf="nbContainers === 0" class="title-config-etat">Aucun site créé</span>
