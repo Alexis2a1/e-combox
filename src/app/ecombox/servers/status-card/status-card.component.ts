@@ -95,33 +95,27 @@ export class StatusCardComponent {
 							let nameImageDb: string;
 							nameImageDb = data.Image;
 
-							let mdpBdd: string;
-							let mdpRootBdd: string;
+							let mdpBdd: string = "";
+							let mdpRootBdd: string = "";
 							let listEnv: [];
 							listEnv = data.Config.Env;
 							listEnv.forEach(function (env: string) {
-								//console.log("env : " + env);
-								//recherche du mdp pour la bdd
+								//recherche des mdp pour la bdd
 								if (env.slice(0,14) === 'MYSQL_PASSWORD') {
 									mdpBdd = env.slice(15);
-									console.log("recup var env mdp MySQL : " + mdpBdd);
 								}
 								else if (env.slice(0,17) === 'POSTGRES_PASSWORD') {
 									mdpBdd = env.slice(18);
-									console.log("recup var env mdp Postgres : " + mdpBdd);
 								}
 
 								if (env.slice(0,19) === 'MYSQL_ROOT_PASSWORD') {
-									console.log(" env root mysql : " + env);
 									mdpRootBdd = env.slice(20);
-									console.log("recup var env mdp ROOT MySQL : " + mdpRootBdd);
 								}
 							});
-						
+
 							//console.log("Démarrage du PUT : ");
 							let start = Date.now();
 							this.dockerService.updateStack(this.idStack,this.typeContainer,this.nameStack,nameImageDb,this.nameBdd,this.nameImage,this.title,this.HTTP_PROXY,this.HTTPS_PROXY,this.NO_PROXY,this.http_proxy,this.https_proxy,this.no_proxy, mdpBdd, mdpRootBdd).subscribe((data: any) => {
-								
 								//execution de la requete pour re-recupérer les infos actualisées (dont l'url avec le port)
 								this.dockerService.getContainersByFiltre('{"name": ["' + this.title + '"]}').subscribe((data: Array<any>) => {
 									data.forEach((container: any) => {

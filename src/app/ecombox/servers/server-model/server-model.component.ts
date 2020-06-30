@@ -230,9 +230,9 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 								let status: boolean = false;
 								let port: string;
 								let nameStack: string;
-	
+
+								nameStack = container.Config.Labels['com.docker.compose.project'];
 								if (container.State.Status === 'running') {
-									nameStack = container.Config.Labels['com.docker.compose.project'];
 									this.isRunning = true;
 									status = true;
 									//console.log("stack allumé");
