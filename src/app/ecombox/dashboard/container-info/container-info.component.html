@@ -7,7 +7,9 @@
             <div class="title">Version :
                 <span class="title-config-etat">{{ version }} </span>
                 <span *ngIf="version === lastVersion" class="title-config-etat">(à jour)</span>
-                <span *ngIf="version !== lastVersion" class="title-config-etat">(une nouvelle version est disponible)</span>
+                <span *ngIf="version !== lastVersion" class="title-config-etat">
+                    <a href="{{ urlInstallVersion }}">(une nouvelle version est disponible)</a>
+                </span>
             </div>
         </div>
         <div class="progress-info">

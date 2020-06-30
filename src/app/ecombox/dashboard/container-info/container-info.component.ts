@@ -17,6 +17,7 @@ export class ContainerInfoComponent implements OnInit {
   cpuUsed: number;
   version: string = environment.ecomboxVersion;
   lastVersion: string;
+  urlInstallVersion: string;
 
   diskSpaceDescription: string;
   diskSpaceUsed: number;
@@ -37,6 +38,9 @@ export class ContainerInfoComponent implements OnInit {
     this.generalService.getAnnounce().subscribe(response => {
       if (response) {
         this.lastVersion = response.version;
+        if (response.url) {
+          this.urlInstallVersion = response.url;
+        }
       }
     }, (error: any) => {
         console.error('ERROR : ' + error);
