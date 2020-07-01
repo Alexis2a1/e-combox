@@ -708,7 +708,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 					} else {
 						listServ.push(container.Id);
 
-						if (nameType.includes('prestashop') || nameType.includes('woocommerce') || nameType.includes('blog')) {
+						if (nameType.includes('prestashop') || nameType.includes('woocommerce') || nameType.includes('blog') || nameType.includes('kanboard')) {
 							listContainersForExec.push(container.Names[0]);
 						}
 					}
@@ -735,7 +735,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							}
 
 							const nameBDD = this.typeServeur + '-db-' + name.split(this.typeServeur + '-')[1];
-							cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + port + ' ' + nameBDD;
+							cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + nameBDD;
 
 							this.launchExec(name, nameBDD, data[0].Id, cmd, this.retryAttempt, true);
 
