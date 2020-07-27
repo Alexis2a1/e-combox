@@ -327,9 +327,6 @@ export class RestService {
 
   //mettre à jour un stack (pour les changements d'environnement)
   updateStack(id: string, server: string, nameStack: string, imageBdd: string, nameContainerBdd: string, imageContainer: string, nameContainer: string,HTTP_PROXY: string, HTTPS_PROXY: string, NO_PROXY: string, http_proxy: string, https_proxy: string, no_proxy: string, MDP_BDD: string, MDP_ROOT_BDD: string): Observable<any> {
-  
-console.log(" dans update MDP BDD : " + MDP_BDD);
-console.log(" dans update MDP ROOT BDD : " + MDP_ROOT_BDD);
 
     if (HTTP_PROXY === undefined) {
       HTTP_PROXY = "";

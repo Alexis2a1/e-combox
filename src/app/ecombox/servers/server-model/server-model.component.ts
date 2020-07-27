@@ -442,9 +442,9 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 			this.nomBdd = this.typeServeur + '-db-' + suffixe;
 		}
 
-		console.log("nom site : " + this.nomSite);
+		/*console.log("nom site : " + this.nomSite);
 		console.log("nom bdd : " + this.nomBdd);
-		console.log("suffixe : " + suffixe);
+		console.log("suffixe : " + suffixe);*/
 
 		this.toastr.info('Création du site en cours. Veuillez patienter, cela peut prendre quelques minutes. ');
 
@@ -453,17 +453,17 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 		let possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		const lengthOfCode = 20;
 		mdp = this.makeRandom(lengthOfCode, possible);
-		console.log("mdp généré : " + mdp);
+		//console.log("mdp généré : " + mdp);
 		//génération d'une chaine aléatoire pour l'utilisateur ROOT de la BDD
 		let mdpRoot : string = "";
 		mdpRoot = this.makeRandom(lengthOfCode, possible);
-		console.log("mdp ROOT généré : " + mdpRoot);
+		//console.log("mdp ROOT généré : " + mdpRoot);
 
 		this.dockerService.createStack(this.typeServeur, suffixe, this.typeDb, this.HTTP_PROXY, this.HTTPS_PROXY, this.NO_PROXY, this.http_proxy, this.https_proxy, this.no_proxy, mdp, mdpRoot).subscribe((data: any) => {
 			this.idStack = data.Id;
 
-			console.log("dans create stack : mdp : " + mdp);
-			console.log("dans create stack : mdp root : " + mdpRoot);
+			/*console.log("dans create stack : mdp : " + mdp);
+			console.log("dans create stack : mdp root : " + mdpRoot);*/
 
 			if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce') || (this.typeServeur === 'blog') || (this.typeServeur === 'kanboard')) {
 
