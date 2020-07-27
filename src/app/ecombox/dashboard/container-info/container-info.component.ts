@@ -86,29 +86,13 @@ export class ContainerInfoComponent implements OnInit {
         this.generalService.dashboardRefreshInProgress = false;
     });
 
-    this.dockerService.getAllContainers().subscribe((data: Array<any>) => {
-
+    this.dockerService.getContainersByFiltre('{"label":["com.docker.compose.app=ecombox"]}').subscribe((data: Array<any>) => {
       const ids = [];
-      // add labels includes phpmyadmin and db
       data.forEach((container: any) => {
-        if (container.Names[0]) {
-          if (!container.Names[0].includes('sftp_') &&
-            !container.Names[0].includes('portainer-') &&
-            !container.Names[0].includes('pma') &&
-            !container.Names[0].includes('-db-') &&
-            !container.Names[0].includes('e-combox')) {
-            ids.push(container.Id);
-          } else {
-            // Incrementation of variable for count Not used containers
-            this.nbNotUsesContainers += 1;
-          }
-        }
-      });
-      // move this block because the code is async
-      this.generalService.getInfo().subscribe((info: any) => {
-        this.nbContainers = info.Containers - this.nbNotUsesContainers;
-        this.generalService.nbContainers = this.nbContainers;
-      });
+        ids.push(container.Id);
+        this.nbContainers += 1;
+        this.generalService.nbContainers += 1;
+      })
 
       if (ids.length > 0) {
         this.dockerService.getStatsContainer(ids).subscribe(res => {
@@ -134,6 +118,7 @@ export class ContainerInfoComponent implements OnInit {
           this.generalService.cpuUsed = this.cpuUsed;
           this.generalService.memoryUsed = this.memoryUsed;
         });
+
       } else {
         this.cpuUsed = -1;
         this.memoryUsed = -1;
@@ -141,9 +126,10 @@ export class ContainerInfoComponent implements OnInit {
       }
 
     },
-      (error: any) => {
-        this.generalService.refreshInProgress = false;
-      });
+    (error: any) => {
+      this.generalService.refreshInProgress = false;
+    });
+
   }
 
 

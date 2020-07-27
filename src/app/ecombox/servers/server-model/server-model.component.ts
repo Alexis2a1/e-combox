@@ -919,7 +919,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 
 			});
 			this.portNginx = port;
-			console.log('port de NGINX : ' + this.portNginx);
+			//console.log('port de NGINX : ' + this.portNginx);
 			this.displayContainers();
 		}, (error: any) => {
 			this.toastr.error('Une erreur est survenue. Vous devez vérifier l\'environnement.');

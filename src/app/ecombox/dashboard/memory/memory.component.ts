@@ -24,38 +24,16 @@ export class MemoryComponent implements AfterViewInit, OnDestroy {
     private dockerService: RestService, private pluralPipe: PluralPipe) { }
 
   getInfo(): void {
-    this.dockerService.getAllRunningContainers().subscribe((data: Array<any>) => {
-      data.forEach((container: any) => {
 
-        if (container.Labels['com.docker.compose.service']) {
-          if (!container.Labels['com.docker.compose.service'].includes('sftp') &&
-            !container.Labels['com.docker.compose.service'].includes('portainer') &&
-            !container.Labels['com.docker.compose.service'].includes('proxy') &&
-            !container.Labels['com.docker.compose.service'].includes('watchtower') &&
-            !container.Labels['com.docker.compose.service'].includes('phpmyadmin') &&
-            !container.Labels['com.docker.compose.service'].includes('db') &&
-            !container.Labels['com.docker.compose.service'].includes('e-combox')) {
+      this.dockerService.getContainersByFiltre('{"status": ["running"], "label":["com.docker.compose.app=ecombox"]}').subscribe((data: Array<any>) => {
+        data.forEach((container: any) => {
+          this.nbStarted += 1;
+        });
 
-              this.nbStarted += 1;
-          }
-        }
-      });
-
-      this.dockerService.getContainersByFiltre('{"status": ["exited"]}').subscribe((containers: Array<any>) => {
+      this.dockerService.getContainersByFiltre('{"status": ["exited"], "label":["com.docker.compose.app=ecombox"]}').subscribe((containers: Array<any>) => {
         this.nbStopped = 0;
-
-        containers.forEach((info: any) => {
-          if (info.Labels['com.docker.compose.service']) {
-            if (!info.Labels['com.docker.compose.service'].includes('sftp') &&
-              !info.Labels['com.docker.compose.service'].includes('portainer') &&
-              !info.Labels['com.docker.compose.service'].includes('proxy') &&
-              !info.Labels['com.docker.compose.service'].includes('watchtower') &&
-              !info.Labels['com.docker.compose.service'].includes('phpmyadmin') &&
-              !info.Labels['com.docker.compose.service'].includes('db')) {
-
-              this.nbStopped += 1;
-            }
-          }
+        containers.forEach((container: any) => {
+          this.nbStopped += 1;
         });
 
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
