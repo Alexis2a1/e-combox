@@ -124,11 +124,11 @@ export class StatusCardComponent {
 										//execution des commandes docker exec pour les serveurs prestashop et wordpress
 										let cmd: string;
 		
-										if (container.Ports[0].PublicPort == null) {
+										/*if (container.Ports[0].PublicPort == null) {
 											this.lePort = container.Ports[1].PublicPort;
 										} else {
 											this.lePort = container.Ports[0].PublicPort;
-										}
+										}*/
 		
 										switch (this.typeContainer) {
 											case 'prestashop':
