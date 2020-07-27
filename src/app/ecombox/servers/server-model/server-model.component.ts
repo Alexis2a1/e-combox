@@ -236,7 +236,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 									this.isRunning = true;
 									status = true;
 									//console.log("stack allumé");
-									port = container.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
+									//port = container.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
 								}
 								else{
 									port = '';
@@ -284,11 +284,11 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						if (container.State === 'running') {
 							this.isRunning = true;
 							status = true;
-							if (container.Ports[0].PublicPort == null) {
+							/*if (container.Ports[0].PublicPort == null) {
 								this.port = container.Ports[1].PublicPort;
 							} else {
 								this.port = container.Ports[0].PublicPort;
-							}
+							}*/
 	
 							this.listURL.push({site: this.nameContainer, url: 'http://' + this.ipDocker + ':' + this.portNginx + '/' + this.nameContainer + backOffice + "/", mdpMautic: 'test'});
 	
@@ -485,7 +485,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 						});
 						
 						//plus utilisé => remplacé par portNginx
-						this.lePort = data.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
+						//this.lePort = data.NetworkSettings.Ports['80/tcp']['0']['HostPort'];
 
 						/*console.log("ip docker: " + this.ipDocker);
 						console.log("le port: " + this.lePort);
@@ -728,11 +728,11 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 							let cmd: string;
 							let port: any;
 
-							if (data[0].Ports[0].PublicPort == null) {
+							/*if (data[0].Ports[0].PublicPort == null) {
 								port = data[0].Ports[1].PublicPort;
 							} else {
 								port = data[0].Ports[0].PublicPort;
-							}
+							}*/
 
 							const nameBDD = this.typeServeur + '-db-' + name.split(this.typeServeur + '-')[1];
 							cmd = '/tmp/config-site.sh ' + this.ipDocker + ' ' + this.portNginx + ' ' + nameBDD;
