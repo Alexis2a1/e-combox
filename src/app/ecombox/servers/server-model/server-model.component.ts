@@ -140,7 +140,7 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 			newServeur = this.typeServeur + '-' + suffixe;
 		}
 
-		console.log("newserveur : " + newServeur);
+		//console.log("newserveur : " + newServeur);
 
 		this.commonStatusCardsSet.forEach(function (card) {
 			if (newServeur === card.title) {
@@ -394,11 +394,11 @@ export class ServerModelComponent implements OnInit, OnDestroy {
 					if (regex.test(suffixe)) {
 						if ((this.typeServeur === 'prestashop') || (this.typeServeur === 'woocommerce')) {
 							this.typeDb = this.option;
-							console.log("typeDb : " + this.typeDb);
+							//console.log("typeDb : " + this.typeDb);
 						}
 						else if (this.typeServeur === 'odoo') {
 							this.typeDb = this.optionOdoo;
-							console.log("typeDb : " + this.typeDb);
+							//console.log("typeDb : " + this.typeDb);
 						}
 						this.message = '';
 						this.validCreate(suffixe);
