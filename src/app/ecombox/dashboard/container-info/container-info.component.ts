@@ -16,7 +16,7 @@ export class ContainerInfoComponent implements OnInit {
   memoryUsed: number;
   cpuUsed: number;
   version: string = environment.ecomboxVersion;
-  lastVersion: string;
+  lastVersion: string = environment.ecomboxVersion;
   urlInstallVersion: string;
 
   diskSpaceDescription: string;
@@ -31,10 +31,6 @@ export class ContainerInfoComponent implements OnInit {
     }
 
   ngOnInit() {
-    if (!this.generalService.dashboardRefreshInProgress) {
-      this.getInfo();
-    }
-
     this.generalService.getAnnounce().subscribe(response => {
       if (response) {
         this.lastVersion = response.version;
@@ -45,6 +41,10 @@ export class ContainerInfoComponent implements OnInit {
     }, (error: any) => {
         console.error('ERROR : ' + error);
     });
+
+    if (!this.generalService.dashboardRefreshInProgress) {
+      this.getInfo();
+    }
   }
 
   reinitializeVariables() {
