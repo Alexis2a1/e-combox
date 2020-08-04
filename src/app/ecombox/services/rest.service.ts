@@ -349,28 +349,362 @@ export class RestService {
 
     switch(server){
       case "prestashop":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : prestashop\n      MYSQL_USER : userPS\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_prestashop_data_db:/var/lib/mysql\n\n  prestashop : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_prestashop_data:/var/www/html\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : prestashop\n      \
+          MYSQL_USER : userPS\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      \- " + nameStack + "_prestashop_data_db:/var/lib/mysql\n\n  \
+          prestashop : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          networks:\n      - net_e-combox\n    \
+          ports:\n      - '80'\n    \
+          volumes :\n      - " + nameStack + "_prestashop_data:/var/www/html\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "woocommerce":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : wordpress\n      MYSQL_USER : userWP\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_woocommerce_data_db:/var/lib/mysql\n\n  wordpress : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_woocommerce_data:/var/www/html\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : wordpress\n      \
+          MYSQL_USER : userWP\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_woocommerce_data_db:/var/lib/mysql\n\n  \
+          wordpress : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          ports:\n      - '80'\n    \
+          networks:\n      - net_e-combox\n    \
+          volumes :\n      - " + nameStack + "_woocommerce_data:/var/www/html\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "blog":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : wordpress\n      MYSQL_USER : userWP\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_blog_data_db:/var/lib/mysql\n\n  wordpress : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_blog_data:/var/www/html\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : wordpress\n      \
+          MYSQL_USER : userWP\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_blog_data_db:/var/lib/mysql\n\n  \
+          wordpress : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          ports:\n      - '80'\n    \
+          networks:\n      - net_e-combox\n    \
+          volumes :\n      - " + nameStack + "_blog_data:/var/www/html\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "odoo":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    environment : \n      POSTGRES_DB : postgres\n      POSTGRES_PASSWORD : " + MDP_BDD + "\n      POSTGRES_USER : userOdoo\n      PGDATA : /var/lib/postgresql/data/pgdata\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_odoo_data_db:/var/lib/postgresql/data\n\n  odoo : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    links :\n      - db\n    volumes :\n      - " + nameStack + "_odoo_data:/var/lib/odoo\n      - " + nameStack + "_odoo_data_config:/etc/odoo\n      - " + nameStack + "_odoo_data_addons:/mnt/extra-addons\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      HOST : db\n      PORT : 5432\n      USER : userOdoo\n      PASSWORD : " + MDP_BDD + "\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n      VIRTUAL_PORT : 8069\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          environment : \n      \
+          POSTGRES_DB : postgres\n      \
+          POSTGRES_PASSWORD : " + MDP_BDD + "\n      \
+          POSTGRES_USER : userOdoo\n      \
+          PGDATA : /var/lib/postgresql/data/pgdata\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_odoo_data_db:/var/lib/postgresql/data\n\n  \
+          odoo : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          ports:\n      - '8069'\n    \
+          networks:\n      - net_e-combox\n    \
+          links :\n      - db\n    \
+          volumes :\n      - " + nameStack + "_odoo_data:/var/lib/odoo\n      - " + nameStack + "_odoo_data_config:/etc/odoo\n      - " + nameStack + "_odoo_data_addons:/mnt/extra-addons\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          HOST : db\n      \
+          PORT : 5432\n      \
+          USER : userOdoo\n      \
+          PASSWORD : " + MDP_BDD + "\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n      \
+          VIRTUAL_PORT : 8069\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "suitecrm":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : suitecrm\n      MYSQL_USER : userSuiteCRM\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_suitecrm_data_db:/var/lib/mysql\n\n  suitecrm : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_suitecrm_data:/var/www/html/upload\n      - " + nameStack + "_suitecrm_conf:/var/www/html/conf.d\n    tty : true\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      DATABASE_HOST : db\n      DATABASE_TYPE : mysql\n      DATABASE_NAME : suitecrm\n      DB_ADMIN_USERNAME : userSuiteCRM\n      DB_ADMIN_PASSWORD : " + MDP_BDD + "\n      SITE_USERNAME : adminSCRM\n      SITE_PASSWORD : scrmAdmin0\n      DATE_FORMAT : d-m-Y\n      EXPORT_CHARSET : ISO-8859-1\n      DEFAULT_LANGUAGE : fr_FR\n      SYSTEM_NAME : Zentek CRM\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : suitecrm\n      \
+          MYSQL_USER : userSuiteCRM\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_suitecrm_data_db:/var/lib/mysql\n\n  \
+          suitecrm : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          networks:\n      - net_e-combox\n    \
+          ports:\n      - '80'\n    \
+          volumes :\n      - " + nameStack + "_suitecrm_data:/var/www/html/upload\n      - " + nameStack + "_suitecrm_conf:/var/www/html/conf.d\n    \
+          tty : true\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          DATABASE_HOST : db\n      \
+          DATABASE_TYPE : mysql\n      \
+          DATABASE_NAME : suitecrm\n      \
+          DB_ADMIN_USERNAME : userSuiteCRM\n      \
+          DB_ADMIN_PASSWORD : " + MDP_BDD + "\n      \
+          SITE_USERNAME : adminSCRM\n      \
+          SITE_PASSWORD : scrmAdmin0\n      \
+          DATE_FORMAT : d-m-Y\n      \
+          EXPORT_CHARSET : ISO-8859-1\n      \
+          DEFAULT_LANGUAGE : fr_FR\n      \
+          SYSTEM_NAME : Zentek CRM\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "kanboard":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : kanboard\n      MYSQL_USER : userKB\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_kanboard_data_db:/var/lib/mysql\n\n  kanboard : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_kanboard_data:/var/www/app/data\n      - " + nameStack + "_kanboard_data_plugins:/var/www/app/plugins\n      - " + nameStack + "_kanboard_data_ssl:/etc/nginx/ssl\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      DATABASE_URL : mysql://userKB:" + MDP_BDD + "@db/kanboard\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + HTTP_PROXY + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n      VIRTUAL_PORT : 80\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          command: --default-authentication-plugin=mysql_native_password\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : kanboard\n      \
+          MYSQL_USER : userKB\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_kanboard_data_db:/var/lib/mysql\n\n  \
+          kanboard : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          ports:\n      - '80'\n    \
+          networks:\n      - net_e-combox\n    \
+          volumes :\n      - " + nameStack + "_kanboard_data:/var/www/app/data\n      - " + nameStack + "_kanboard_data_plugins:/var/www/app/plugins\n      - " + nameStack + "_kanboard_data_ssl:/etc/nginx/ssl\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          DATABASE_URL : mysql://userKB:" + MDP_BDD + "@db/kanboard\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + HTTP_PROXY + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n      \
+          VIRTUAL_PORT : 80\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "humhub":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : humhub\n      MYSQL_USER : userHH\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_humhub_data_db:/var/lib/mysql\n\n  humhub : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_humhub_data_config:/var/www/localhost/htdocs/protected/config\n      - " + nameStack + "_humhub_data_uploads:/var/www/localhost/htdocs/uploads\n      - " + nameStack + "_humhub_data_modules:/var/www/localhost/htdocs/protected/modules\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      HUMHUB_DB_HOST : db\n      HUMHUB_DB_NAME : humhub\n      HUMHUB_DB_USER : userHH\n      HUMHUB_DB_PASSWORD : " + MDP_BDD + "\n      HUMHUB_AUTO_INSTALL : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : humhub\n      \
+          MYSQL_USER : userHH\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_humhub_data_db:/var/lib/mysql\n\n  \
+          humhub : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          ports:\n      - '80\n    \
+          networks:\n      - net_e-combox\n    \
+          volumes :\n      - " + nameStack + "_humhub_data_config:/var/www/localhost/htdocs/protected/config\n      - " + nameStack + "_humhub_data_uploads:/var/www/localhost/htdocs/uploads\n      - " + nameStack + "_humhub_data_modules:/var/www/localhost/htdocs/protected/modules\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          HUMHUB_DB_HOST : db\n      \
+          HUMHUB_DB_NAME : humhub\n      \
+          HUMHUB_DB_USER : userHH\n      \
+          HUMHUB_DB_PASSWORD : " + MDP_BDD + "\n      \
+          HUMHUB_AUTO_INSTALL : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n    \
+          depends_on :\n      - db\n\
+          networks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
       case "mautic":
-          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  db :\n    labels:\n      com.docker.compose.app: 'ecombox-db'\n    image : " + imageBdd + "\n    container_name : " + nameContainerBdd + "\n    networks:\n      - net_e-combox\n    expose :\n      - '3306'\n    environment : \n      MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      MYSQL_DATABASE : mautic\n      MYSQL_USER : userMautic\n      MYSQL_PASSWORD : " + MDP_BDD + "\n      MYSQL_INITDB_SKIP_TZINFO : 1\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n    volumes : \n      - " + nameStack + "_mautic_data_db:/var/lib/mysql\n\n  mautic : \n    labels:\n      com.docker.compose.app: 'ecombox'\n    image : " + imageContainer + "\n    container_name : " + nameContainer + "\n    networks:\n      - net_e-combox\n    volumes :\n      - " + nameStack + "_mautic_data:/var/www/html\n    external_links : \n      - " + nameContainerBdd + ":db\n    environment : \n      MAUTIC_DB_HOST : db\n      MAUTIC_DB_NAME : mautic\n      MAUTIC_DB_USER : userMautic\n      MAUTIC_DB_PASSWORD : " + MDP_BDD + "\n      HTTP_PROXY : " + HTTP_PROXY + "\n      HTTPS_PROXY : " + HTTPS_PROXY + "\n      http_proxy : " + http_proxy + "\n      https_proxy : " + https_proxy + "\n      NO_PROXY : " + NO_PROXY + "\n      no_proxy : " + no_proxy + "\n      DB_PASS : " + MDP_BDD + "\n      VIRTUAL_HOST : " + nameContainer + "\n    depends_on :\n      - db\nnetworks:\n  net_e-combox:\n    external:\n      name: bridge_e-combox";
+          paramsUpdateStack.StackFileContent = "version : 2\nservices :\n  \
+          db :\n    \
+          labels:\n      com.docker.compose.app: 'ecombox-db'\n    \
+          image : " + imageBdd + "\n    \
+          container_name : " + nameContainerBdd + "\n    \
+          networks:\n      - net_e-combox\n    \
+          expose :\n      - '3306'\n    \
+          environment : \n      \
+          MYSQL_ROOT_PASSWORD : " + MDP_ROOT_BDD + "\n      \
+          MYSQL_DATABASE : mautic\n      \
+          MYSQL_USER : userMautic\n      \
+          MYSQL_PASSWORD : " + MDP_BDD + "\n      \
+          MYSQL_INITDB_SKIP_TZINFO : 1\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n    \
+          volumes : \n      - " + nameStack + "_mautic_data_db:/var/lib/mysql\n\n  \
+          mautic : \n    \
+          labels:\n      com.docker.compose.app: 'ecombox'\n    \
+          image : " + imageContainer + "\n    \
+          container_name : " + nameContainer + "\n    \
+          ports:\n      - '80'\n    \
+          networks:\n      - net_e-combox\n    \
+          volumes :\n      - " + nameStack + "_mautic_data:/var/www/html\n    \
+          external_links : \n      - " + nameContainerBdd + ":db\n    \
+          environment : \n      \
+          MAUTIC_DB_HOST : db\n      \
+          MAUTIC_DB_NAME : mautic\n      \
+          MAUTIC_DB_USER : userMautic\n      \
+          MAUTIC_DB_PASSWORD : " + MDP_BDD + "\n      \
+          HTTP_PROXY : " + HTTP_PROXY + "\n      \
+          HTTPS_PROXY : " + HTTPS_PROXY + "\n      \
+          http_proxy : " + http_proxy + "\n      \
+          https_proxy : " + https_proxy + "\n      \
+          NO_PROXY : " + NO_PROXY + "\n      \
+          no_proxy : " + no_proxy + "\n      \
+          DB_PASS : " + MDP_BDD + "\n      \
+          PHP_INI_DATE_TIMEZONE: Europe/Paris\n      \
+          MAUTIC_RUN_CRON_JOBS: 'true'\n      \
+          VIRTUAL_HOST : " + nameContainer + "\n    \
+          depends_on :\n      - db\nnetworks:\n  \
+          net_e-combox:\n    external:\n      name: bridge_e-combox";
           break;
     }
 
