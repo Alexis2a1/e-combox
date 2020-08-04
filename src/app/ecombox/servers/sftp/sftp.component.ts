@@ -3,6 +3,7 @@ import { NbThemeService } from '@nebular/theme';
 import { SolarData } from '../../../@core/data/solar';
 import { takeWhile } from 'rxjs/operators';
 import { RestService } from '../../services/rest.service';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 interface CardSettings {
 	title: string;
@@ -23,6 +24,10 @@ interface CardSettings {
 })
 export class SftpComponent implements OnInit, OnDestroy {
 
+	noSitePresta: string;
+	noSiteOdoo: string;
+	nomsSftp = [];
+	listSftp = [];
 	loading = false;
 	private alive = true;
 	solarValue: number;
@@ -89,159 +94,168 @@ export class SftpComponent implements OnInit, OnDestroy {
 	//recupère la liste des stacks SFTP opérationnels
 	private displayContainers() {
 		this.loading = true;
+		let mdp: string;
+		let servSftp = {
+			nomSftp: "",
+			portSftp: "",
+			mdpSftp: ""
+		};
 
-		const listSftp = [];
+		this.nomsSftp.splice(0, this.nomsSftp.length);
+		this.listSftp.splice(0, this.listSftp.length);
 
 		//recupération des serveurs SFTP existant
-		this.dockerService.getContainersByFiltre('{"name": ["^sftp"], "status": ["running"]}').subscribe((dataSftp: Array<any>) => {
+		this.dockerService.getContainersByFiltre('{"name": ["^sftp"], "label":["com.docker.compose.app=ecombox-sftp"]}').subscribe((dataSftp: Array<any>) => {
 			let nom: string;
-			let mdp: string;
-			let servSftp = {
-				nomSftp: "",
-				portSftp: "",
-				mdpSftp: ""
-			};
 
-			dataSftp.forEach((containerSftp: any) => {
-				nom = containerSftp.Names[0];
-				nom = nom.slice(1, nom.length);
+			if(dataSftp.length > 0){
+				dataSftp.forEach((containerSftp: any) => {
+					nom = containerSftp.Names[0];
+					nom = nom.slice(1, nom.length);
+					this.nomsSftp.push(nom);
+				})
 
-				//recupération du mot de passe dans la variable d'environnement SFTP_PASS
-				//les variables d'environnement ne peuvent être récupérées qu'avec une requête "inspect"
-				this.dockerService.inspectContainerByName(nom).subscribe((container: any) => {
-					let listEnv: [];
-					listEnv = container.Config.Env;
-					listEnv.forEach(function (env: string) {
-						//recherche du mdp pour la bdd
-						if (env.slice(0,10) === 'SFTP_PASS=') {
-							mdp = env.slice(10);
-						}
-					});
+				//la recupération du mot de passe dans la variable d'environnement SFTP_PASS
+				//ne peuvent se faire qu'avec une requête "inspect"
+				//getSftpInfos permet d'enchainer l'ensemble des requêtes inspect nécessaires et de poursuivre
+				//qu'une fois l'ensemle des infos récupérées
+				this.dockerService.getSftpInfos(this.nomsSftp).subscribe(res => {
+					res.forEach(sftp => {
+						let listEnv: [];
+						listEnv = sftp.Config.Env;
+						listEnv.forEach(function (env: string) {
+							//recherche du mdp pour la bdd
+							if (env.slice(0,10) === 'SFTP_PASS=') {
+								mdp = env.slice(10);
+							}
+						});
 	
-					servSftp = {
-						nomSftp: container.Name.slice(1,container.Name.length),
-						portSftp: containerSftp.Ports[0].PublicPort,
-						mdpSftp: mdp
-					};
-	
-					listSftp.push(servSftp);
+						servSftp = {
+							nomSftp: sftp.Name.slice(1,sftp.Name.length),
+							portSftp: sftp.NetworkSettings.Ports['22/tcp']['0']['HostPort'],
+							mdpSftp: mdp
+						};
 
+						this.listSftp.push(servSftp);	
+					})
+
+					this.recupListSites();
 				});
 
-			})
-
-			//récupération des prestashop
-			this.dockerService.getContainersByFiltre('{"name": ["^prestashop"], "status": ["running"]}').subscribe((data: Array<any>) => {
-
-				let name: string;
-				let nameType: string;
-				let nameDb: string;
-				let portSftp: string;
-				let mdpSftp: string;
-				let status: boolean;
-				let actif: string;
-
-				data.forEach((containerPresta: any) => {
-					name = containerPresta.Names[0];
-					name = name.slice(1, name.length);
-
-					nameType = name.slice(0, 13);
-					nameDb = "prestashop-db";
-					if (nameType != nameDb) {
-						//verification de l'existence d'un serveur SFTP associé et récupération du port d'écoute
-						let search = listSftp.find(sftp => sftp.nomSftp === 'sftp_' + containerPresta.Labels["com.docker.compose.project"]);
-
-						if (search) {
-							status = true;
-							portSftp = search.portSftp;
-							mdpSftp = search.mdpSftp;
-							actif = "active";
-						}
-						else {
-							status = false;
-							portSftp = "";
-							actif = "desactive";
-						}
-
-						let cardPresta: CardSettings = {
-							title: name,
-							iconClass: 'nb-power-circled',
-							id: containerPresta.Id,
-							type: 'success',
-							on: status,
-							actif: actif,
-							url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp + ' MDP : ' + mdpSftp,
-							typeContainer: 'prestashop',
-							nameStack: containerPresta.Labels["com.docker.compose.project"]
-						};
-
-						this.commonStatusCardsPrestaSet.push(cardPresta);
-
-					}
-
-					this.loading = false;
-				})
-				this.loading = false;
-			});
-
-			//récupération des odoo
-			this.dockerService.getContainersByFiltre('{"name": ["^odoo"], "status": ["running"]}').subscribe((data: Array<any>) => {
-
-				let name: string;
-				let nameType: string;
-				let nameDb: string;
-				let portSftp: string;
-				let mdpSftp: string;
-				let status: boolean;
-				let actif: string;
-
-				data.forEach((containerOdoo: any) => {
-					name = containerOdoo.Names[0];
-					name = name.slice(1, name.length);
-
-					nameType = name.slice(0, 7);
-					nameDb = "odoo-db";
-					if (nameType != nameDb) {
-						//verification de l'existence d'un serveur SFTP associé et récupération du port d'écoute
-						let search = listSftp.find(sftp => sftp.nomSftp === 'sftp_' + containerOdoo.Labels["com.docker.compose.project"]);
-
-						if (search) {
-							status = true;
-							portSftp = search.portSftp;
-							mdpSftp = search.mdpSftp;
-							actif = "active";
-						}
-						else {
-							status = false;
-							portSftp = "";
-							actif = "desactive";
-						}
-
-						let cardOdoo: CardSettings = {
-							title: name,
-							iconClass: 'nb-power-circled',
-							id: containerOdoo.Id,
-							type: 'success',
-							on: status,
-							actif: actif,
-							url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp + ' Mdp : ' + mdpSftp,
-							typeContainer: 'odoo',
-							nameStack: containerOdoo.Labels["com.docker.compose.project"]
-						};
-
-						this.commonStatusCardsOdooSet.push(cardOdoo);
-
-					}
-
-					this.loading = false;
-				})
-				this.loading = false;
-			});
-
+			}
+			else{
+				this.recupListSites();
+			}
 
 		});
 
+	}
 
+	recupListSites() {
+		//récupération des prestashop
+		this.dockerService.getContainersByFiltre('{"name": ["^prestashop"], "status": ["running"], "label":["com.docker.compose.app=ecombox"]}').subscribe((data: Array<any>) => {
+
+			let name: string;
+			let portSftp: string;
+			let mdpSftp: string;
+			let status: boolean;
+			let actif: string;
+				
+			if(data.length === 0) {
+				this.noSitePresta = "Aucun site Prestashop démarré.";
+			}
+			else {
+				this.noSitePresta = "";
+			}
+
+			data.forEach((containerPresta: any) => {
+				name = containerPresta.Names[0];
+				name = name.slice(1, name.length);
+
+				//verification de l'existence d'un serveur SFTP associé et récupération du port d'écoute
+				let search = this.listSftp.find(sftp => sftp.nomSftp === 'sftp_' + containerPresta.Labels["com.docker.compose.project"]);
+
+				if (search) {
+					status = true;
+					portSftp = search.portSftp;
+					mdpSftp = search.mdpSftp;
+					actif = "active";
+				}
+				else {
+					status = false;
+					portSftp = "";
+					actif = "desactive";
+				}
+
+				let cardPresta: CardSettings = {
+					title: name,
+					iconClass: 'nb-power-circled',
+					id: containerPresta.Id,
+					type: 'success',
+					on: status,
+					actif: actif,
+					url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp + ' MDP : ' + mdpSftp,
+					typeContainer: 'prestashop',
+					nameStack: containerPresta.Labels["com.docker.compose.project"]
+				};
+
+				this.commonStatusCardsPrestaSet.push(cardPresta);
+			})
+
+			this.loading = false;
+		});
+
+		//récupération des odoo
+		this.dockerService.getContainersByFiltre('{"name": ["^odoo"], "status": ["running"], "label":["com.docker.compose.app=ecombox"]}').subscribe((data: Array<any>) => {
+
+			let name: string;
+			let portSftp: string;
+			let mdpSftp: string;
+			let status: boolean;
+			let actif: string;
+
+			if(data.length === 0) {
+				this.noSiteOdoo = "Aucun site Odoo démarré.";
+			}
+			else {
+				this.noSiteOdoo = "";
+			}
+
+			data.forEach((containerOdoo: any) => {
+				name = containerOdoo.Names[0];
+				name = name.slice(1, name.length);
+
+				//verification de l'existence d'un serveur SFTP associé et récupération du port d'écoute
+				let search = this.listSftp.find(sftp => sftp.nomSftp === 'sftp_' + containerOdoo.Labels["com.docker.compose.project"]);
+
+				if (search) {
+					status = true;
+					portSftp = search.portSftp;
+					mdpSftp = search.mdpSftp;
+					actif = "active";
+				}
+				else {
+					status = false;
+					portSftp = "";
+					actif = "desactive";
+				}
+
+				let cardOdoo: CardSettings = {
+					title: name,
+					iconClass: 'nb-power-circled',
+					id: containerOdoo.Id,
+					type: 'success',
+					on: status,
+					actif: actif,
+					url: 'Hôte : ' + this.ipDocker + ' Port : ' + portSftp + ' Mdp : ' + mdpSftp,
+					typeContainer: 'odoo',
+					nameStack: containerOdoo.Labels["com.docker.compose.project"]
+				};
+
+				this.commonStatusCardsOdooSet.push(cardOdoo);
+			})
+			this.loading = false;
+		});
 	}
 
 	ngOnDestroy() {

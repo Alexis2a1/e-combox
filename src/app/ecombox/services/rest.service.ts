@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, forkJoin, concat } from 'rxjs';
 import { catchError, tap, timeout, concatMap, mergeMap, last } from 'rxjs/operators';
 
-const endpoint = 'http://llb.ac-corse.fr:11271/portainer/api/';
+const endpoint = 'http://llb.ac-corse.fr:11251/portainer/api/';
 
 const portainerUser = {
   Username: 'admin',
@@ -516,6 +516,15 @@ export class RestService {
     const reqs = [];
     stacks.forEach((id: string) => {
       reqs.push(this.http.delete(endpoint + 'stacks/' + id));
+    });
+    
+    return forkJoin(reqs);
+  }
+
+  getSftpInfos(infos: Array<string>): Observable<any> {
+    const reqs = [];
+    infos.forEach((name: string) => {
+      reqs.push(this.http.get(endpoint + `endpoints/1/docker/containers/${name}/json`));
     });
     
     return forkJoin(reqs);

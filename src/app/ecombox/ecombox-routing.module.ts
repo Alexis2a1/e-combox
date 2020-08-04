@@ -24,7 +24,7 @@ const routes: Routes = [{
     canActivate: [RedirectGuard],
     component: RedirectGuard,
     data: {
-      externalUrl: 'http://llb.ac-corse.fr:11271/portainer/',
+      externalUrl: 'http://llb.ac-corse.fr:11251/portainer/',
     },
   }, {
     path: '',

@@ -69,7 +69,7 @@ export class SftpCardComponent {
 		 let mdp : string = "";
 		 let possible = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		 const lengthOfCode = 6;
-		 mdp = this.makeRandom(lengthOfCode, possible);
+     mdp = this.makeRandom(lengthOfCode, possible);
 
       this.dockerService.createStackSftp(this.typeContainer,this.nameStack, mdp).subscribe((data: any) => {
 
@@ -77,21 +77,7 @@ export class SftpCardComponent {
         if (this.typeContainer == "odoo"){
           let cmd: string;
           cmd = "chown -R 101:101 /home/adminOdoo/addons";
-  
-            this.dockerService.createExec(this.title,cmd).subscribe((data: any) => {
-  
-              this.dockerService.startExec(data.Id).subscribe((data: any) => {
-  
-                this.actif= "active";
-                this.on = !this.on;
-                this.servSftp.reloadCards();
-                
-                //arret du spinner
-                this.loading = false;
-                this.toastr.success('Le SFTP est activé pour '+ this.title);
-  
-              });
-            });
+          this.launchExec(this.title, cmd);
         }
         else {
           this.actif= "active";
@@ -135,5 +121,18 @@ export class SftpCardComponent {
     }
     
   }
+
+  private launchExec(name: string, cmd: string) {
+
+		this.dockerService.runExecInstance(name, cmd).subscribe((data: any) => {
+				this.loading = false;
+        this.toastr.success('Le SFTP est activé pour '+ this.title);
+        this.actif= "active";
+        this.on = !this.on;
+        this.servSftp.reloadCards();
+    },(error: any) => {
+        this.toastr.error("Le SFTP n'a pas été démarré pour " + this.title + ", veuillez retenter l'opération");
+    });
+	}
 
 }
