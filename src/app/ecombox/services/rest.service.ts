@@ -13,7 +13,7 @@ const portainerUser = {
 const paramsGithubStack = {
   Name: '',	
   RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-  RepositoryReferenceName: 'refs/heads/dev',
+  RepositoryReferenceName: 'refs/heads/master',
   ComposeFilePathInRepository: '',
   RepositoryAuthentication: false,
   Env: [
@@ -64,7 +64,7 @@ const paramsUpdateStack = {
 const paramsGithubStackSftp = {
   Name: '',	
   RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-  RepositoryReferenceName: 'refs/heads/dev',
+  RepositoryReferenceName: 'refs/heads/master',
   ComposeFilePathInRepository: '',
   RepositoryAuthentication: false,
   Env: [
@@ -81,7 +81,7 @@ const paramsGithubStackSftp = {
 const paramsGithubStackPma = {
   Name: '',	
   RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-  RepositoryReferenceName: 'refs/heads/dev',
+  RepositoryReferenceName: 'refs/heads/master',
   ComposeFilePathInRepository: '',
   RepositoryAuthentication: false,
   Env: [
