@@ -84247,7 +84247,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 var DashboardComponent = /** @class */ (function () {
     function DashboardComponent() {
-        console.log("e-comBox version dev du 04/08/2020");
+        console.log("e-comBox version v2 du 04/08/2020");
     }
     DashboardComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({

@@ -3387,7 +3387,7 @@ var FooterComponent = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'ngx-footer',
             styles: [__webpack_require__(/*! ./footer.component.scss */ "./src/app/@theme/components/footer/footer.component.scss")],
-            template: "\n    <span class=\"created-by\">Created with \u2665 by <b><a href=\"https://llb.ac-corse.fr\" \n    target=\"_blank\">BTS SIO - LLB</a> & <a href=\"https://www.reseaucerta.org\" \n    target=\"_blank\">Certa</a></b> 2020 - version en d\u00E9veloppement</span>\n    <div class=\"socials\">\n      <a href=\"https://www.reseaucerta.org\" target=\"_blank\"><img src=\"assets/images/logoCerta.gif\" height=\"40\"></a>\n      <!--<a href=\"#\" target=\"_blank\" class=\"ion ion-social-github\"></a>\n      <a href=\"#\" target=\"_blank\" class=\"ion ion-social-facebook\"></a>\n      <a href=\"#\" target=\"_blank\" class=\"ion ion-social-twitter\"></a>\n      <a href=\"#\" target=\"_blank\" class=\"ion ion-social-linkedin\"></a>-->\n    </div>\n  ",
+            template: "\n    <span class=\"created-by\">Created with \u2665 by <b><a href=\"https://llb.ac-corse.fr\" \n    target=\"_blank\">BTS SIO - LLB</a> & <a href=\"https://www.reseaucerta.org\" \n    target=\"_blank\">Certa</a></b> 2020 - v2</span>\n    <div class=\"socials\">\n      <a href=\"https://www.reseaucerta.org\" target=\"_blank\"><img src=\"assets/images/logoCerta.gif\" height=\"40\"></a>\n      <!--<a href=\"#\" target=\"_blank\" class=\"ion ion-social-github\"></a>\n      <a href=\"#\" target=\"_blank\" class=\"ion ion-social-facebook\"></a>\n      <a href=\"#\" target=\"_blank\" class=\"ion ion-social-twitter\"></a>\n      <a href=\"#\" target=\"_blank\" class=\"ion ion-social-linkedin\"></a>-->\n    </div>\n  ",
         })
     ], FooterComponent);
     return FooterComponent;
@@ -5955,7 +5955,7 @@ var portainerUser = {
 var paramsGithubStack = {
     Name: '',
     RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-    RepositoryReferenceName: 'refs/heads/dev',
+    RepositoryReferenceName: 'refs/heads/master',
     ComposeFilePathInRepository: '',
     RepositoryAuthentication: false,
     Env: [
@@ -6004,7 +6004,7 @@ var paramsUpdateStack = {
 var paramsGithubStackSftp = {
     Name: '',
     RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-    RepositoryReferenceName: 'refs/heads/dev',
+    RepositoryReferenceName: 'refs/heads/master',
     ComposeFilePathInRepository: '',
     RepositoryAuthentication: false,
     Env: [
@@ -6020,7 +6020,7 @@ var paramsGithubStackSftp = {
 var paramsGithubStackPma = {
     Name: '',
     RepositoryURL: 'https://gitlab.com/e-combox/e-comBox_docker-compose',
-    RepositoryReferenceName: 'refs/heads/dev',
+    RepositoryReferenceName: 'refs/heads/master',
     ComposeFilePathInRepository: '',
     RepositoryAuthentication: false,
     Env: [
